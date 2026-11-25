@@ -1,0 +1,33 @@
+{
+  "id": "/",
+  "name": "Naxora Bd — Viral Store & E-Market",
+  "short_name": "Naxora Bd",
+  "description": "Shop trending viral gadgets, streetwear, and instant game top-ups across Bangladesh.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#06080f",
+  "theme_color": "#ff2e63",
+  "categories": ["shopping", "entertainment"],
+  "icons": [
+    {
+      "src": "/icons/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

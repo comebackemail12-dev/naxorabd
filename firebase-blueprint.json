@@ -1,0 +1,857 @@
+{
+  "entities": {
+    "StoreConfig": {
+      "title": "StoreConfig",
+      "description": "Global platform configuration, branding, logo, micro-UI visibility switches, Manual/Auto/COD/Wallet payment toggles, delivery fees, and theme settings controlled exclusively by Main Admin.",
+      "type": "object",
+      "properties": {
+        "brandName": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "brandLogoUrl": { "type": "string", "maxLength": 500 },
+        "brandTaglineBn": { "type": "string", "maxLength": 160 },
+        "brandTaglineEn": { "type": "string", "maxLength": 160 },
+        "footerTagBn": { "type": "string", "maxLength": 240 },
+        "footerTagEn": { "type": "string", "maxLength": 240 },
+        "metaTitle": { "type": "string", "maxLength": 120 },
+        "metaDescription": { "type": "string", "maxLength": 240 },
+        "currencySymbol": { "type": "string", "minLength": 1, "maxLength": 8 },
+        "defaultLang": { "type": "string", "enum": ["bn", "en"] },
+        "supportPhone": { "type": "string", "maxLength": 30 },
+        "supportWhatsapp": { "type": "string", "maxLength": 30 },
+        "supportEmail": { "type": "string", "maxLength": 160 },
+        "announcementBn": { "type": "string", "maxLength": 200 },
+        "announcementEn": { "type": "string", "maxLength": 200 },
+        "heroTitle": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "heroSubtitle": { "type": "string", "maxLength": 300 },
+        "accentColor": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "maxLength": 7 },
+        "secondaryColor": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "maxLength": 7 },
+        "gridColsDesktop": { "type": "integer", "minimum": 3, "maximum": 6 },
+        "cardCompactMode": { "type": "boolean" },
+        "sliderAutoPlayMs": { "type": "integer", "minimum": 2000, "maximum": 20000 },
+        "showAnnouncementBar": { "type": "boolean" },
+        "showHeaderSearch": { "type": "boolean" },
+        "showHeaderNotices": { "type": "boolean" },
+        "showHeaderNotifs": { "type": "boolean" },
+        "showLangToggle": { "type": "boolean" },
+        "showBottomNav": { "type": "boolean" },
+        "showHomeCategories": { "type": "boolean" },
+        "showRecentlyViewed": { "type": "boolean" },
+        "showFooter": { "type": "boolean" },
+        "allowOrderCancel": { "type": "boolean" },
+        "userAppEnabled": { "type": "boolean" },
+        "adminAppEnabled": { "type": "boolean" },
+        "maintenanceMessage": { "type": "string", "maxLength": 300 },
+        "flashDropEnabled": { "type": "boolean" },
+        "flashDropEndIso": { "type": "string", "maxLength": 40 },
+        "reviewsEnabled": { "type": "boolean" },
+        "couponsEnabled": { "type": "boolean" },
+        "wishlistEnabled": { "type": "boolean" },
+        "ticketsEnabled": { "type": "boolean" },
+        "slidersEnabled": { "type": "boolean" },
+        "noticesEnabled": { "type": "boolean" },
+        "eMarketEnabled": { "type": "boolean" },
+        "codEnabled": { "type": "boolean" },
+        "codMinOrderBdt": { "type": "number" },
+        "codMaxOrderBdt": { "type": "number" },
+        "codAdvanceDeliveryOutsideDhaka": { "type": "boolean" },
+        "deliveryInsideDhakaBdt": { "type": "number" },
+        "deliveryOutsideDhakaBdt": { "type": "number" },
+        "deliveryExpressBdt": { "type": "number" },
+        "freeDeliveryThresholdBdt": { "type": "number" },
+        "heavenPayEnabled": { "type": "boolean" },
+        "manualPayEnabled": { "type": "boolean" },
+        "autoPayEnabled": { "type": "boolean" },
+        "autoPayProvider": { "type": "string", "maxLength": 60 },
+        "autoPaySandbox": { "type": "boolean" },
+        "walletEnabled": { "type": "boolean" },
+        "bkashEnabled": { "type": "boolean" },
+        "bkashNumber": { "type": "string", "maxLength": 30 },
+        "nagadEnabled": { "type": "boolean" },
+        "nagadNumber": { "type": "string", "maxLength": 30 },
+        "rocketEnabled": { "type": "boolean" },
+        "rocketNumber": { "type": "string", "maxLength": 30 },
+        "upayEnabled": { "type": "boolean" },
+        "upayNumber": { "type": "string", "maxLength": 30 },
+        "cardGatewayEnabled": { "type": "boolean" },
+        "gatewayFeePercent": { "type": "number" },
+        "gatewayInstructions": { "type": "string", "maxLength": 400 },
+        "cashbackPercent": { "type": "number" },
+        "referralBonusBdt": { "type": "number" },
+        "comboMinQty": { "type": "integer", "minimum": 2, "maximum": 20 },
+        "comboDiscountPercent": { "type": "number" },
+        "ffLookupEnabled": { "type": "boolean" },
+        "vipEnabled": { "type": "boolean" },
+        "emiEnabled": { "type": "boolean" },
+        "reviewBonusBdt": { "type": "number" },
+        "otpRequiredForOrder": { "type": "boolean" },
+        "resellerCommissionPct": { "type": "number" },
+        "reelsEnabled": { "type": "boolean" },
+        "spinWheelEnabled": { "type": "boolean" },
+        "dailyCheckInBdt": { "type": "number" },
+        "preOrderEnabled": { "type": "boolean" },
+        "groupBuyEnabled": { "type": "boolean" },
+        "giftCardsEnabled": { "type": "boolean" },
+        "tournamentsEnabled": { "type": "boolean" },
+        "resellerDefaultDiscountPct": { "type": "number" },
+        "lowStockThreshold": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "brandName",
+        "brandLogoUrl",
+        "currencySymbol",
+        "defaultLang",
+        "gridColsDesktop",
+        "cardCompactMode",
+        "userAppEnabled",
+        "adminAppEnabled",
+        "codEnabled",
+        "heavenPayEnabled",
+        "manualPayEnabled",
+        "autoPayEnabled",
+        "walletEnabled",
+        "deliveryInsideDhakaBdt",
+        "deliveryOutsideDhakaBdt",
+        "updatedAt"
+      ]
+    },
+    "CodeOverrides": {
+      "title": "CodeOverrides",
+      "description": "Live custom CSS, theme tokens, and behavior flags pushed by Main Admin to User App and Normal Admin App.",
+      "type": "object",
+      "properties": {
+        "userCustomCss": { "type": "string", "maxLength": 20000 },
+        "userCustomJs": { "type": "string", "maxLength": 20000 },
+        "adminCustomCss": { "type": "string", "maxLength": 20000 },
+        "adminCustomJs": { "type": "string", "maxLength": 20000 },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "updatedBy": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["userCustomCss", "userCustomJs", "adminCustomCss", "adminCustomJs", "updatedAt", "updatedBy"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Bilingual product category for viral storefront filtering.",
+      "type": "object",
+      "properties": {
+        "nameEn": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "nameBn": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9\\-]+$", "maxLength": 60 },
+        "sortOrder": { "type": "integer" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["nameEn", "nameBn", "slug", "sortOrder", "isActive", "createdAt", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Trending or viral product sold across categories in BDT.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "subtitleBn": { "type": "string", "maxLength": 160 },
+        "categoryId": { "type": "string", "pattern": "^[a-zA-Z0-9_\\-]+$", "maxLength": 60 },
+        "priceBdt": { "type": "number" },
+        "compareAtBdt": { "type": "number" },
+        "costPriceBdt": { "type": "number" },
+        "stock": { "type": "integer" },
+        "viralSource": { "type": "string", "maxLength": 60 },
+        "imageUrl": { "type": "string", "maxLength": 500 },
+        "galleryUrls": { "type": "array" },
+        "videoUrl": { "type": "string", "maxLength": 500 },
+        "description": { "type": "string", "maxLength": 1500 },
+        "variants": { "type": "array" },
+        "isFeatured": { "type": "boolean" },
+        "isFlashDrop": { "type": "boolean" },
+        "isActive": { "type": "boolean" },
+        "emiEligible": { "type": "boolean" },
+        "fbtProductIds": { "type": "array" },
+        "salesCount": { "type": "integer" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "title",
+        "categoryId",
+        "priceBdt",
+        "stock",
+        "imageUrl",
+        "isActive",
+        "createdBy",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Shopper review and star rating for a product.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "userName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string", "minLength": 2, "maxLength": 600 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userName", "rating", "comment", "createdAt"]
+    },
+    "ProductQuestion": {
+      "title": "ProductQuestion",
+      "description": "Shopper Q&A question and admin answer on a product.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "userName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "question": { "type": "string", "minLength": 3, "maxLength": 500 },
+        "answer": { "type": "string", "maxLength": 800 },
+        "answeredBy": { "type": "string", "maxLength": 128 },
+        "answeredAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userName", "question", "answer", "createdAt", "updatedAt"]
+    },
+    "Coupon": {
+      "title": "Coupon",
+      "description": "Discount promo code managed by Main Admin or permitted Normal Admins.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z0-9_\\-]+$", "minLength": 2, "maxLength": 30 },
+        "discountType": { "type": "string", "enum": ["percent", "fixed"] },
+        "discountValue": { "type": "number" },
+        "minOrderBdt": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "discountType", "discountValue", "minOrderBdt", "isActive", "createdBy", "createdAt", "updatedAt"]
+    },
+    "AdminProfile": {
+      "title": "AdminProfile",
+      "description": "Normal Admin access record and granular 11-permission matrix managed exclusively by Main Admin.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["pending", "approved", "suspended"] },
+        "permissions": { "type": "object" },
+        "requestedAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "status", "permissions", "requestedAt", "updatedAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private customer profile containing saved delivery PII, wishlist, and admin-verified wallet balance.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "savedPhone": { "type": "string", "maxLength": 25 },
+        "savedAddress": { "type": "string", "maxLength": 300 },
+        "savedZone": { "type": "string", "enum": ["inside_dhaka", "outside_dhaka", "express"] },
+        "wishlist": { "type": "array" },
+        "savedGameUids": { "type": "array" },
+        "walletBalanceBdt": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email", "createdAt", "updatedAt"]
+    },
+    "WalletRequest": {
+      "title": "WalletRequest",
+      "description": "Customer Add-Money wallet deposit request (Manual wallet app TrxID awaiting Admin approval, or Auto Gateway instant top-up receipt).",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "userEmail": { "type": "string", "maxLength": 160 },
+        "userName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "paymentMode": { "type": "string", "enum": ["manual", "auto"] },
+        "walletApp": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "amountBdt": { "type": "number" },
+        "paidAmountBdt": { "type": "number" },
+        "senderNumber": { "type": "string", "maxLength": 25 },
+        "trxId": { "type": "string", "minLength": 3, "maxLength": 60 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "adminNote": { "type": "string", "maxLength": 240 },
+        "reviewedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId",
+        "userEmail",
+        "userName",
+        "paymentMode",
+        "walletApp",
+        "amountBdt",
+        "paidAmountBdt",
+        "senderNumber",
+        "trxId",
+        "status",
+        "adminNote",
+        "reviewedBy",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer order with Manual, Auto Gateway, COD, or Wallet payment details and fulfillment state.",
+      "type": "object",
+      "properties": {
+        "orderNumber": { "type": "string", "maxLength": 30 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "userEmail": { "type": "string", "maxLength": 160 },
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "phone": { "type": "string", "minLength": 6, "maxLength": 25 },
+        "address": { "type": "string", "minLength": 5, "maxLength": 350 },
+        "deliveryZone": { "type": "string", "enum": ["inside_dhaka", "outside_dhaka", "express"] },
+        "items": { "type": "array" },
+        "subtotalBdt": { "type": "number" },
+        "deliveryFeeBdt": { "type": "number" },
+        "gatewayFeeBdt": { "type": "number" },
+        "discountBdt": { "type": "number" },
+        "comboDiscountBdt": { "type": "number" },
+        "offerDiscountBdt": { "type": "number" },
+        "couponCode": { "type": "string", "maxLength": 30 },
+        "totalBdt": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["cod", "manual", "auto", "wallet", "bkash", "nagad", "rocket", "upay", "card"] },
+        "manualApp": { "type": "string", "maxLength": 40 },
+        "paidAmountBdt": { "type": "number" },
+        "walletPaidBdt": { "type": "number" },
+        "remainingPayableBdt": { "type": "number" },
+        "paymentStatus": { "type": "string", "enum": ["unpaid", "pending_verify", "paid", "refunded"] },
+        "trxId": { "type": "string", "maxLength": 60 },
+        "senderNumber": { "type": "string", "maxLength": 25 },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "packed", "shipped", "delivered", "cancelled"] },
+        "courierProvider": { "type": "string", "maxLength": 40 },
+        "courierTracking": { "type": "string", "maxLength": 80 },
+        "isExpressOrder": { "type": "boolean" },
+        "isPreOrder": { "type": "boolean" },
+        "dueOnDeliveryBdt": { "type": "number" },
+        "groupBuyId": { "type": "string", "maxLength": 128 },
+        "emiMonths": { "type": "integer" },
+        "emiMonthlyBdt": { "type": "number" },
+        "emiDownPaymentBdt": { "type": "number" },
+        "isResellerOrder": { "type": "boolean" },
+        "resellerDropshipNote": { "type": "string", "maxLength": 240 },
+        "resellerProfitBdt": { "type": "number" },
+        "resellerProfitCredited": { "type": "boolean" },
+        "resellerCreditedBdt": { "type": "number" },
+        "handledBy": { "type": "string", "maxLength": 128 },
+        "handledByEmail": { "type": "string", "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "orderNumber",
+        "userId",
+        "customerName",
+        "phone",
+        "address",
+        "deliveryZone",
+        "items",
+        "subtotalBdt",
+        "deliveryFeeBdt",
+        "totalBdt",
+        "paymentMethod",
+        "paymentStatus",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Ticket": {
+      "title": "Ticket",
+      "description": "Customer support or return ticket linked to an order.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "orderNumber": { "type": "string", "maxLength": 30 },
+        "subject": { "type": "string", "minLength": 3, "maxLength": 140 },
+        "message": { "type": "string", "minLength": 3, "maxLength": 1000 },
+        "adminReply": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["open", "in_progress", "resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "orderId", "subject", "message", "status", "createdAt", "updatedAt"]
+    },
+    "Slider": {
+      "title": "Slider",
+      "description": "Hero promotional banner slide managed by Main Admin or permitted Normal Admins.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "subtitleBn": { "type": "string", "maxLength": 220 },
+        "badgeText": { "type": "string", "maxLength": 40 },
+        "imageUrl": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "ctaLabel": { "type": "string", "minLength": 1, "maxLength": 50 },
+        "linkPage": { "type": "string", "enum": ["home", "explore", "emarket", "cart", "orders"] },
+        "linkTarget": { "type": "string", "maxLength": 120 },
+        "sortOrder": { "type": "integer" },
+        "isActive": { "type": "boolean" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "imageUrl", "ctaLabel", "linkPage", "sortOrder", "isActive", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Notice": {
+      "title": "Notice",
+      "description": "Storewide notice alert or announcement managed by Main Admin or permitted Normal Admins.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "messageBn": { "type": "string", "minLength": 2, "maxLength": 600 },
+        "messageEn": { "type": "string", "maxLength": 600 },
+        "priority": { "type": "string", "enum": ["info", "promo", "urgent"] },
+        "isActive": { "type": "boolean" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "messageBn", "priority", "isActive", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Automatic order/wallet lifecycle alerts and manual admin/main-admin broadcast or direct notifications.",
+      "type": "object",
+      "properties": {
+        "targetUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "title": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "body": { "type": "string", "minLength": 2, "maxLength": 600 },
+        "type": {
+          "type": "string",
+          "enum": [
+            "order_placed",
+            "order_update",
+            "order_completed",
+            "order_cancelled",
+            "emarket_placed",
+            "emarket_completed",
+            "emarket_cancelled",
+            "wallet_topup",
+            "wallet_approved",
+            "wallet_rejected",
+            "wallet_refund",
+            "wallet_admin_adjust",
+            "wallet_transfer",
+            "reward_bonus",
+            "ticket_reply",
+            "return_update",
+            "stock_alert",
+            "group_buy",
+            "gift_card",
+            "tournament",
+            "reseller",
+            "account_status",
+            "campaign",
+            "promo",
+            "admin_alert",
+            "system",
+            "vip_upgrade",
+            "reseller_payout",
+            "prize_payout",
+            "sub_renew"
+          ]
+        },
+        "refId": { "type": "string", "maxLength": 128 },
+        "isRead": { "type": "boolean" },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["targetUid", "title", "body", "type", "isRead", "createdBy", "createdAt"]
+    },
+    "EMarketItem": {
+      "title": "EMarketItem",
+      "description": "Digital game top-up, app subscription, or streaming platform subscription product in E-Market.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "subtitleBn": { "type": "string", "maxLength": 180 },
+        "category": { "type": "string", "enum": ["game_topup", "app_subscription", "platform_subscription"] },
+        "inputLabel": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "inputPlaceholder": { "type": "string", "maxLength": 100 },
+        "packages": { "type": "array" },
+        "costPriceBdt": { "type": "number" },
+        "renewalDays": { "type": "integer", "minimum": 0, "maximum": 3650 },
+        "imageUrl": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "deliveryEta": { "type": "string", "maxLength": 60 },
+        "salesCount": { "type": "integer" },
+        "isActive": { "type": "boolean" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "category", "inputLabel", "packages", "imageUrl", "isActive", "createdBy", "createdAt", "updatedAt"]
+    },
+    "EMarketOrder": {
+      "title": "EMarketOrder",
+      "description": "Customer E-Market digital top-up or subscription purchase order with Player UID or Account Email and Manual/Auto/Wallet payment details.",
+      "type": "object",
+      "properties": {
+        "orderNumber": { "type": "string", "minLength": 3, "maxLength": 30 },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "userEmail": { "type": "string", "maxLength": 160 },
+        "itemId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "itemTitle": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "category": { "type": "string", "enum": ["game_topup", "app_subscription", "platform_subscription"] },
+        "packageLabel": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "priceBdt": { "type": "number" },
+        "gatewayFeeBdt": { "type": "number" },
+        "totalBdt": { "type": "number" },
+        "targetAccount": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "playerNickname": { "type": "string", "maxLength": 80 },
+        "serverOrNote": { "type": "string", "maxLength": 200 },
+        "paymentMethod": { "type": "string", "enum": ["manual", "auto", "wallet", "bkash", "nagad", "rocket", "upay", "card"] },
+        "manualApp": { "type": "string", "maxLength": 40 },
+        "paidAmountBdt": { "type": "number" },
+        "paymentStatus": { "type": "string", "enum": ["pending_verify", "paid", "refunded"] },
+        "trxId": { "type": "string", "minLength": 3, "maxLength": 60 },
+        "senderNumber": { "type": "string", "maxLength": 25 },
+        "status": { "type": "string", "enum": ["pending", "processing", "completed", "cancelled"] },
+        "deliveryCode": { "type": "string", "maxLength": 300 },
+        "autoRenew": { "type": "boolean" },
+        "gameName": { "type": "string", "maxLength": 40 },
+        "serverRegion": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "orderNumber",
+        "userId",
+        "itemId",
+        "itemTitle",
+        "category",
+        "packageLabel",
+        "priceBdt",
+        "totalBdt",
+        "targetAccount",
+        "paymentMethod",
+        "paymentStatus",
+        "trxId",
+        "senderNumber",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdminInvite": {
+      "title": "AdminInvite",
+      "description": "Email-based Normal Admin pre-authorization and granular permissions configured by Main Admin before or alongside account creation.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "status": { "type": "string", "enum": ["approved", "suspended"] },
+        "permissions": { "type": "object" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "displayName", "status", "permissions", "createdBy", "createdAt", "updatedAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Activity audit trail recorded by admins and Main Admin.",
+      "type": "object",
+      "properties": {
+        "actorUid": { "type": "string", "maxLength": 128 },
+        "actorEmail": { "type": "string", "maxLength": 160 },
+        "actorRole": { "type": "string", "enum": ["main_admin", "admin"] },
+        "action": { "type": "string", "maxLength": 120 },
+        "target": { "type": "string", "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["actorUid", "actorEmail", "actorRole", "action", "target", "createdAt"]
+    },
+    "OrderMessage": {
+      "title": "OrderMessage",
+      "description": "Real-time customer and admin support message scoped to an order.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "orderOwnerUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "senderUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "senderRole": { "type": "string", "enum": ["user", "admin", "main_admin"] },
+        "senderName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "text": { "type": "string", "minLength": 1, "maxLength": 800 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderId", "orderOwnerUid", "senderUid", "senderRole", "senderName", "text", "createdAt"]
+    },
+    "Reel": {
+      "title": "Reel",
+      "description": "Shoppable viral short video reel linked to a product.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "badgeText": { "type": "string", "maxLength": 60 },
+        "videoUrl": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "posterUrl": { "type": "string", "maxLength": 600 },
+        "productId": { "type": "string", "maxLength": 128 },
+        "productTitle": { "type": "string", "maxLength": 140 },
+        "likesCount": { "type": "integer" },
+        "isActive": { "type": "boolean" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "videoUrl", "isActive", "createdBy", "createdAt", "updatedAt"]
+    },
+    "ReturnRequest": {
+      "title": "ReturnRequest",
+      "description": "Customer order return, replacement, or photo dispute request.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "userEmail": { "type": "string", "maxLength": 160 },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "orderNumber": { "type": "string", "maxLength": 30 },
+        "type": { "type": "string", "enum": ["refund", "replace"] },
+        "reason": { "type": "string", "minLength": 3, "maxLength": 600 },
+        "photoUrl": { "type": "string", "maxLength": 600 },
+        "refundBdt": { "type": "number" },
+        "refundAmountBdt": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "approved", "replacement", "rejected"] },
+        "adminNote": { "type": "string", "maxLength": 300 },
+        "reviewedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "orderId", "type", "reason", "status", "createdAt", "updatedAt"]
+    },
+    "StockAlert": {
+      "title": "StockAlert",
+      "description": "Customer back-in-stock or price drop alert subscription.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string", "maxLength": 128 },
+        "productTitle": { "type": "string", "maxLength": 120 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "userEmail": { "type": "string", "maxLength": 160 },
+        "alertType": { "type": "string", "enum": ["stock", "price"] },
+        "targetPriceBdt": { "type": "number" },
+        "notified": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "userId", "alertType", "notified", "createdAt"]
+    },
+    "GroupBuy": {
+      "title": "GroupBuy",
+      "description": "Group buy team deal session.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string", "maxLength": 128 },
+        "productTitle": { "type": "string", "maxLength": 120 },
+        "groupPriceBdt": { "type": "number" },
+        "targetSize": { "type": "integer" },
+        "creatorUid": { "type": "string", "maxLength": 128 },
+        "creatorName": { "type": "string", "maxLength": 80 },
+        "memberUids": { "type": "array" },
+        "status": { "type": "string", "enum": ["open", "filled", "expired", "cancelled"] },
+        "expiresAtIso": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "groupPriceBdt", "targetSize", "creatorUid", "memberUids", "status", "createdAt", "updatedAt"]
+    },
+    "Tournament": {
+      "title": "Tournament",
+      "description": "Esports custom room gaming tournament.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "game": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "mode": { "type": "string", "maxLength": 30 },
+        "entryFeeBdt": { "type": "number" },
+        "prizePoolBdt": { "type": "number" },
+        "maxSlots": { "type": "integer" },
+        "filledSlots": { "type": "integer" },
+        "joinedUids": { "type": "array" },
+        "startTimeIso": { "type": "string", "maxLength": 40 },
+        "status": { "type": "string", "enum": ["open", "live", "completed", "cancelled"] },
+        "imageUrl": { "type": "string", "maxLength": 500 },
+        "isActive": { "type": "boolean" },
+        "leaderboard": { "type": "array" },
+        "prizesDistributed": { "type": "boolean" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "game", "entryFeeBdt", "prizePoolBdt", "maxSlots", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "TournamentEntry": {
+      "title": "TournamentEntry",
+      "description": "Player or squad entry for a gaming tournament.",
+      "type": "object",
+      "properties": {
+        "tournamentId": { "type": "string", "maxLength": 128 },
+        "tournamentTitle": { "type": "string", "maxLength": 120 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "userName": { "type": "string", "maxLength": 80 },
+        "gameUid": { "type": "string", "maxLength": 60 },
+        "entryFeeBdt": { "type": "number" },
+        "mode": { "type": "string", "maxLength": 30 },
+        "teamName": { "type": "string", "maxLength": 80 },
+        "teammateUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["tournamentId", "userId", "createdAt"]
+    },
+    "BlacklistEntry": {
+      "title": "BlacklistEntry",
+      "description": "Fake order shield phone/email blacklist record.",
+      "type": "object",
+      "properties": {
+        "phone": { "type": "string", "maxLength": 30 },
+        "email": { "type": "string", "maxLength": 160 },
+        "reason": { "type": "string", "maxLength": 300 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["phone", "email", "reason", "createdBy", "createdAt"]
+    },
+    "Campaign": {
+      "title": "Campaign",
+      "description": "Scheduled flash sale or promotional discount campaign.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "discountPercent": { "type": "number" },
+        "startIso": { "type": "string", "maxLength": 40 },
+        "endIso": { "type": "string", "maxLength": 40 },
+        "minOrderBdt": { "type": "number" },
+        "bannerNoteBn": { "type": "string", "maxLength": 300 },
+        "isActive": { "type": "boolean" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "discountPercent", "isActive", "createdBy", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/storeConfig/global": {
+      "schema": { "$ref": "#/entities/StoreConfig" },
+      "description": "Global platform configuration, Manual/Auto/COD/Wallet channels, delivery rules, and feature flags."
+    },
+    "/storeConfig/codeOverrides": {
+      "schema": { "$ref": "#/entities/CodeOverrides" },
+      "description": "Live custom CSS/JS injection managed exclusively by Main Admin."
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Storefront viral categories."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Viral products catalog."
+    },
+    "/products/{productId}/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Customer reviews for a product."
+    },
+    "/products/{productId}/questions/{questionId}": {
+      "schema": { "$ref": "#/entities/ProductQuestion" },
+      "description": "Customer Q&A questions and admin answers for a product."
+    },
+    "/coupons/{couponCode}": {
+      "schema": { "$ref": "#/entities/Coupon" },
+      "description": "Promo discount coupons."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminProfile" },
+      "description": "Normal admin access registry and permission matrix."
+    },
+    "/adminInvites/{inviteEmail}": {
+      "schema": { "$ref": "#/entities/AdminInvite" },
+      "description": "Pre-approved Normal Admin email invitations created by Main Admin."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Shopper private profile, saved address, and wallet balance."
+    },
+    "/walletRequests/{requestId}": {
+      "schema": { "$ref": "#/entities/WalletRequest" },
+      "description": "Customer Add-Money wallet deposit requests awaiting Admin verification or Auto Gateway receipts."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Customer orders with Manual, Auto Gateway, COD, or Wallet payment metadata."
+    },
+    "/orders/{orderId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/OrderMessage" },
+      "description": "Real-time order-specific live chat between customer and support/admin."
+    },
+    "/tickets/{ticketId}": {
+      "schema": { "$ref": "#/entities/Ticket" },
+      "description": "Customer support and return requests."
+    },
+    "/sliders/{sliderId}": {
+      "schema": { "$ref": "#/entities/Slider" },
+      "description": "Promotional hero sliders controlled by Main Admin or permitted Normal Admins."
+    },
+    "/notices/{noticeId}": {
+      "schema": { "$ref": "#/entities/Notice" },
+      "description": "Storewide notice alerts controlled by Main Admin or permitted Normal Admins."
+    },
+    "/notifications/{notifId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "User personal and broadcast notifications."
+    },
+    "/emarketItems/{itemId}": {
+      "schema": { "$ref": "#/entities/EMarketItem" },
+      "description": "E-Market game top-ups, app subscriptions, and streaming platform subscriptions."
+    },
+    "/emarketOrders/{orderId}": {
+      "schema": { "$ref": "#/entities/EMarketOrder" },
+      "description": "Customer E-Market digital top-up and subscription orders."
+    },
+    "/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Admin and Main Admin activity logs."
+    },
+    "/reels/{reelId}": {
+      "schema": { "$ref": "#/entities/Reel" },
+      "description": "Shoppable viral video reels."
+    },
+    "/returns/{returnId}": {
+      "schema": { "$ref": "#/entities/ReturnRequest" },
+      "description": "Customer order return and replacement requests."
+    },
+    "/stockAlerts/{alertId}": {
+      "schema": { "$ref": "#/entities/StockAlert" },
+      "description": "Back-in-stock and price-drop alert subscriptions."
+    },
+    "/groupBuys/{groupId}": {
+      "schema": { "$ref": "#/entities/GroupBuy" },
+      "description": "Group buy team deal sessions."
+    },
+    "/tournaments/{tournamentId}": {
+      "schema": { "$ref": "#/entities/Tournament" },
+      "description": "Esports custom room tournaments."
+    },
+    "/tournamentEntries/{entryId}": {
+      "schema": { "$ref": "#/entities/TournamentEntry" },
+      "description": "Player and squad tournament entries."
+    },
+    "/blacklist/{entryId}": {
+      "schema": { "$ref": "#/entities/BlacklistEntry" },
+      "description": "Fake order shield phone and email blacklist."
+    },
+    "/campaigns/{campaignId}": {
+      "schema": { "$ref": "#/entities/Campaign" },
+      "description": "Scheduled flash sale and discount campaigns."
+    }
+  }
+}

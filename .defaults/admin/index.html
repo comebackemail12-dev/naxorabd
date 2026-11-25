@@ -1,0 +1,1131 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Naxora Bd — Admin Console</title>
+  <link rel="icon" id="admin-favicon" type="image/jpeg" href="/src/assets/images/naxora_bd_logo_1795288025158.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/style.css" />
+</head>
+<body>
+  <!-- Auth Gate -->
+  <div id="admin-auth-gate" class="auth-gate">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <img id="auth-brand-logo" src="/src/assets/images/naxora_bd_logo_1795288025158.jpg" alt="Naxora Bd Logo" class="auth-logo" referrerPolicy="no-referrer" />
+        <div>
+          <span class="auth-eyebrow">OPERATIONS WORKSPACE</span>
+          <h1 id="auth-brand-name">Naxora Bd</h1>
+        </div>
+      </div>
+      <p class="auth-sub">মেইন অ্যাডমিন কর্তৃক অনুমোদিত জিমেইল + পাসওয়ার্ড অথবা Google অ্যাকাউন্ট দিয়ে সাইন ইন করুন।</p>
+      <div id="admin-auth-error" class="alert-box alert-error hidden"></div>
+      <div id="admin-auth-notice" class="alert-box alert-info hidden"></div>
+
+      <!-- Verification Prompt (for newly created Email/Password accounts) -->
+      <div id="admin-verify-box" class="verify-box hidden">
+        <p style="margin:0 0 10px;font-size:12.5px;line-height:1.5;">
+          নিরাপত্তার জন্য আপনার জিমেইল ইনবক্সের ভেরিফিকেশন লিংকে ক্লিক করুন অথবা নিচে Google দিয়ে সাইন ইন করুন।
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" id="admin-resend-verify-btn" class="btn btn-outline btn-sm">Send Verification Email</button>
+          <button type="button" id="admin-recheck-verify-btn" class="btn btn-primary btn-sm">I Verified — Continue</button>
+        </div>
+      </div>
+
+      <form id="admin-login-form" class="stack-form">
+        <label class="field">
+          <span>Admin Gmail Address</span>
+          <input type="email" id="admin-login-email" required placeholder="admin@gmail.com" autocomplete="email" />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" id="admin-login-password" required placeholder="••••••••" autocomplete="current-password" />
+        </label>
+        <button type="submit" id="admin-login-btn" class="btn btn-primary btn-full">Sign In with Email &amp; Password</button>
+      </form>
+      <div class="auth-divider"><span>OR</span></div>
+      <button type="button" id="admin-google-btn" class="btn btn-outline btn-full">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21.8 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.5c-.2 1.2-.9 2.3-2 3v2.5h3.2c1.9-1.7 3.1-4.3 3.1-7.3z" fill="#4285F4"/><path d="M12 22c2.7 0 5-.9 6.7-2.4l-3.2-2.5c-.9.6-2.1 1-3.5 1-2.7 0-4.9-1.8-5.7-4.2H3v2.6C4.7 19.8 8.1 22 12 22z" fill="#34A853"/><path d="M6.3 13.9c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9V7.5H3C2.3 8.9 2 10.4 2 12s.3 3.1 1 4.5l3.3-2.6z" fill="#FBBC05"/><path d="M12 5.9c1.5 0 2.8.5 3.9 1.5l2.9-2.9C17 2.9 14.7 2 12 2 8.1 2 4.7 4.2 3 7.5l3.3 2.6c.8-2.4 3-4.2 5.7-4.2z" fill="#EA4335"/></svg>
+        <span>Continue with Google (Gmail)</span>
+      </button>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <a href="/user/?shop=1" class="btn btn-ghost btn-xs">← Storefront</a>
+        <button type="button" id="admin-switch-acct-btn" class="btn btn-ghost btn-xs hidden">Sign Out &amp; Switch Account</button>
+      </div>
+      <p class="auth-help-note">মেইন অ্যাডমিন পাসওয়ার্ড সেট না করে শুধু জিমেইল অ্যাড করলে সরাসরি Google বাটন ব্যবহার করুন।</p>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Backdrop -->
+  <div id="admin-drawer-backdrop" class="drawer-backdrop hidden"></div>
+
+  <!-- Main Workspace Shell -->
+  <div id="admin-app-shell" class="admin-shell hidden">
+    <aside id="admin-sidebar" class="admin-sidebar">
+      <div class="sidebar-brand">
+        <img id="sidebar-brand-logo" src="/src/assets/images/naxora_bd_logo_1795288025158.jpg" alt="Naxora Bd" class="brand-emblem" referrerPolicy="no-referrer" />
+        <div class="brand-text">
+          <strong id="sidebar-brand-name">Naxora Bd</strong>
+          <span id="admin-role-chip" class="role-chip">ADMIN CONSOLE</span>
+        </div>
+        <button type="button" id="admin-sidebar-close" class="btn btn-ghost btn-xs sidebar-close-btn">✕</button>
+      </div>
+
+      <nav class="sidebar-nav" id="admin-sidebar-nav">
+        <div class="nav-group">
+          <span class="nav-group-label">Workspace</span>
+          <button type="button" class="nav-item active" data-view="overview">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+            <span>Overview</span>
+          </button>
+        </div>
+
+        <div class="nav-group" id="nav-group-commerce">
+          <span class="nav-group-label">Catalog &amp; Orders</span>
+          <button type="button" class="nav-item hidden" data-view="products" data-nav-key="products">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            <span>Products</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="orders" data-nav-key="orders">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span>Orders</span>
+            <span id="nav-badge-orders" class="nav-count hidden">0</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="emarket" data-nav-key="emarket">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>E-Market Hub</span>
+            <span id="nav-badge-emarket" class="nav-count hidden">0</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="wallet" data-nav-key="wallet">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M16 12h2"/><path d="M6 6V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/></svg>
+            <span>Wallet Top-Ups</span>
+            <span id="nav-badge-wallet" class="nav-count hidden">0</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="categories" data-nav-key="categories">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+            <span>Categories</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="coupons" data-nav-key="coupons">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            <span>Coupons</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="returns" data-nav-key="returns">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            <span>Returns &amp; Disputes</span>
+            <span id="nav-badge-returns" class="nav-count hidden">0</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="users" data-nav-key="users">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>Customers CRM</span>
+          </button>
+        </div>
+
+        <div class="nav-group" id="nav-group-engagement">
+          <span class="nav-group-label">Engagement &amp; Shield</span>
+          <button type="button" class="nav-item hidden" data-view="sliders" data-nav-key="sliders">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+            <span>Hero Sliders</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="reels" data-nav-key="reels">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            <span>Viral Reels</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="campaigns" data-nav-key="campaigns">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            <span>Flash Campaigns</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="tournaments" data-nav-key="tournaments">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            <span>Tournaments</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="notices" data-nav-key="notices">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span>Notice Board</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="notifications" data-nav-key="notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            <span>Push Alerts</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="blacklist" data-nav-key="blacklist">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Order Shield</span>
+          </button>
+          <button type="button" class="nav-item hidden" data-view="tickets" data-nav-key="tickets">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Support Tickets</span>
+            <span id="nav-badge-tickets" class="nav-count hidden">0</span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div id="admin-avatar-pill" class="avatar-pill">A</div>
+          <div class="user-meta">
+            <strong id="admin-display-name">Admin</strong>
+            <span id="admin-user-email">loading...</span>
+          </div>
+        </div>
+        <button type="button" id="admin-logout-btn" class="btn btn-ghost btn-sm btn-full">Sign Out</button>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button type="button" id="admin-menu-btn" class="btn btn-outline btn-sm menu-toggle-btn" aria-label="Open Navigation">☰ Menu</button>
+          <div>
+            <h2 id="topbar-view-title">Operations Overview</h2>
+            <p id="topbar-view-sub">রিয়েলটাইম স্টোর ও অপারেশন সামারি</p>
+          </div>
+        </div>
+        <div class="topbar-actions" id="admin-topbar-actions">
+          <a href="/user/?shop=1" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Storefront ↗</a>
+        </div>
+      </header>
+
+      <main class="admin-content">
+        <!-- OVERVIEW VIEW -->
+        <section id="view-overview" class="view-section">
+          <div id="overview-kpis" class="kpi-grid"></div>
+          <div id="overview-empty-notice" class="panel-card hidden">
+            <div class="empty-workspace">
+              <h3>অ্যাডমিন ওয়ার্কস্পেস প্রস্তুত</h3>
+              <p>আপনার অ্যাকাউন্ট সক্রিয় রয়েছে। কাজের সেকশন বরাদ্দের জন্য অনুগ্রহ করে মেইন অ্যাডমিনের সাথে যোগাযোগ করুন।</p>
+            </div>
+          </div>
+          <div id="adm-profit-panel" class="panel-card hidden">
+            <div class="panel-head">
+              <div>
+                <h3>Net Profit &amp; Margin Intelligence</h3>
+                <span class="muted-note">Daily Revenue vs COGS vs Net Profit (10 Days) &amp; Top Margin Products</span>
+              </div>
+            </div>
+            <div id="adm-profit-chart" class="chart-svg-wrap"></div>
+            <div class="table-wrap" style="margin-top:14px;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Sold Qty</th>
+                    <th>Revenue</th>
+                    <th>COGS</th>
+                    <th>Net Profit</th>
+                    <th>Margin %</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-top-margin-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="adm-expenses-panel" class="panel-card hidden">
+            <div class="panel-head">
+              <div>
+                <h3>Daily Expenses Ledger &amp; True Net Profit</h3>
+                <span class="muted-note">বিজ্ঞাপন (Ads), প্যাকেজিং ও অপারেশন খরচ যোগ করুন — অটোমেটিক আসল নেট লাভ ও ROI % হিসাব হবে</span>
+              </div>
+            </div>
+            <form id="adm-expense-form" class="grid-form">
+              <label class="field">
+                <span>Category *</span>
+                <select id="adm-exp-cat">
+                  <option value="ads">Ads / Marketing</option>
+                  <option value="packaging">Packaging &amp; Supplies</option>
+                  <option value="shipping">Shipping / Courier</option>
+                  <option value="ops">Operations / Salary</option>
+                </select>
+              </label>
+              <label class="field"><span>Expense Title *</span><input type="text" id="adm-exp-title" required maxlength="100" placeholder="e.g. Facebook Boost Campaign" /></label>
+              <label class="field"><span>Amount (৳) *</span><input type="number" id="adm-exp-amount" min="1" required placeholder="500" /></label>
+              <label class="field"><span>Date</span><input type="date" id="adm-exp-date" /></label>
+              <label class="field field-span-2"><span>Note (Optional)</span><input type="text" id="adm-exp-note" maxlength="200" placeholder="Campaign or vendor note..." /></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary btn-sm">Add Expense</button></div>
+            </form>
+            <div class="table-wrap" style="margin-top:12px;">
+              <table class="data-table">
+                <thead><tr><th>Category</th><th>Title &amp; Note</th><th>Date</th><th>Amount</th><th>Action</th></tr></thead>
+                <tbody id="adm-expenses-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="overview-split">
+            <div id="overview-low-stock-panel" class="panel-card hidden">
+              <div class="panel-head">
+                <h3>Low Stock Alerts</h3>
+                <span class="muted-note">Stock ≤ 5</span>
+              </div>
+              <div id="overview-low-stock-list" class="mini-list"></div>
+            </div>
+            <div id="overview-recent-orders-panel" class="panel-card hidden">
+              <div class="panel-head">
+                <h3>Recent Orders</h3>
+                <button type="button" class="btn btn-ghost btn-xs" data-jump-view="orders">View All →</button>
+              </div>
+              <div id="overview-recent-orders-list" class="mini-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PRODUCTS VIEW -->
+        <section id="view-products" class="view-section hidden">
+          <div id="product-form-card" class="panel-card hidden">
+            <div class="panel-head">
+              <h3 id="pf-form-title">Create New Product</h3>
+              <button type="button" id="pf-reset-btn" class="btn btn-ghost btn-xs hidden">Cancel Edit</button>
+            </div>
+            <form id="product-form" class="grid-form">
+              <input type="hidden" id="pf-id" />
+              <label class="field">
+                <span>Product Title *</span>
+                <input type="text" id="pf-title" required minlength="2" maxlength="120" placeholder="e.g. Cyber Mechanical Keyboard" />
+              </label>
+              <label class="field">
+                <span>Subtitle (Bangla)</span>
+                <input type="text" id="pf-subtitle" maxlength="160" placeholder="স্মার্ট মেকানিক্যাল কিবোর্ড" />
+              </label>
+              <label class="field">
+                <span>Category *</span>
+                <select id="pf-category" required></select>
+              </label>
+              <label class="field">
+                <span>Viral Source / Tag</span>
+                <input type="text" id="pf-source" maxlength="60" placeholder="TikTok Viral / Reels" />
+              </label>
+              <label class="field">
+                <span>Sale Price *</span>
+                <input type="number" id="pf-price" min="1" required placeholder="1290" />
+              </label>
+              <label class="field">
+                <span>Compare At Price</span>
+                <input type="number" id="pf-compare" min="0" value="0" placeholder="1690" />
+              </label>
+              <label class="field">
+                <span>Cost Price (COGS)</span>
+                <input type="number" id="pf-cost" min="0" value="0" placeholder="850" />
+              </label>
+              <label class="field">
+                <span>Stock Qty *</span>
+                <input type="number" id="pf-stock" min="0" required value="15" />
+              </label>
+              <label class="field">
+                <span>Variants (comma separated)</span>
+                <input type="text" id="pf-variants" placeholder="Black, White, Cyber Neon" />
+              </label>
+              <label class="field">
+                <span>Video Preview URL (Optional)</span>
+                <input type="url" id="pf-video" maxlength="500" placeholder="https://.../preview.mp4" />
+              </label>
+              <label class="field">
+                <span>Reseller / Wholesale Price (৳, optional)</span>
+                <input type="number" id="pf-reseller-price" min="0" value="0" placeholder="0 = auto reseller % off" />
+              </label>
+              <label class="field">
+                <span>Pre-Order ETA (e.g. 10-14 Days)</span>
+                <input type="text" id="pf-preorder-eta" maxlength="60" placeholder="10-14 Days" />
+              </label>
+              <label class="field">
+                <span>Pre-Order Deposit % (10–100)</span>
+                <input type="number" id="pf-preorder-pct" min="10" max="100" value="30" />
+              </label>
+              <label class="field">
+                <span>Group Buy Team Price (৳)</span>
+                <input type="number" id="pf-groupbuy-price" min="0" value="0" />
+              </label>
+              <label class="field">
+                <span>Group Buy Team Size (2–10)</span>
+                <input type="number" id="pf-groupbuy-size" min="2" max="10" value="2" />
+              </label>
+              <label class="field field-span-2">
+                <span>Product Image URL *</span>
+                <div class="input-with-btn">
+                  <input type="text" id="pf-image" required placeholder="/src/assets/images/..." />
+                  <button type="button" class="btn btn-outline btn-sm" data-pick-asset="pf-image">Studio Assets</button>
+                </div>
+              </label>
+              <label class="field field-span-2">
+                <span>Gallery Image URLs (max 6, comma or newline separated)</span>
+                <textarea id="pf-gallery" rows="2" placeholder="https://.../img2.jpg, https://.../img3.jpg"></textarea>
+              </label>
+              <label class="field field-span-2">
+                <span>Variant-Linked Price, Stock &amp; Image (1 per line: Name | Price | Stock | ImageURL)</span>
+                <textarea id="pf-variant-details" rows="2" maxlength="3000" placeholder="Warm Moon | 2490 | 12 | /src/assets/images/..."></textarea>
+              </label>
+              <label class="field field-span-2">
+                <span>Short Description</span>
+                <textarea id="pf-desc" rows="2" maxlength="1500" placeholder="Product highlights & specs..."></textarea>
+              </label>
+              <label class="field field-span-2">
+                <span>Frequently Bought Together (Product IDs, comma separated, max 6)</span>
+                <input type="text" id="pf-fbt" maxlength="300" placeholder="prodId1, prodId2" />
+              </label>
+              <div class="field-row field-span-2">
+                <label class="check-pill"><input type="checkbox" id="pf-featured" /> Featured / Trending</label>
+                <label class="check-pill"><input type="checkbox" id="pf-flash" /> Flash Drop</label>
+                <label class="check-pill"><input type="checkbox" id="pf-preorder" /> Pre-Order Item</label>
+                <label class="check-pill"><input type="checkbox" id="pf-groupbuy" /> Enable Group Buy</label>
+                <label class="check-pill"><input type="checkbox" id="pf-emi" /> 0% EMI Eligible</label>
+                <label class="check-pill"><input type="checkbox" id="pf-active" checked /> Active</label>
+              </div>
+              <div class="field-span-2 form-actions">
+                <button type="submit" id="pf-submit-btn" class="btn btn-primary">Save Product</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="adm-low-stock-panel" class="panel-card hidden">
+            <div class="panel-head">
+              <div><h3>⚠ Low-Stock Auto Warning</h3><span class="muted-note">স্টক থ্রেশহোল্ডের নিচে নেমে গেছে — ১ ক্লিকে +10 রিস্টক করুন</span></div>
+            </div>
+            <div id="adm-low-stock-list" class="low-stock-grid"></div>
+          </div>
+
+          <div class="panel-card">
+            <div class="toolbar-row">
+              <h3>Catalog Inventory</h3>
+              <div class="toolbar-controls">
+                <input type="search" id="prod-search" class="toolbar-input" placeholder="Search title or ID..." />
+                <select id="prod-cat-filter" class="toolbar-select"><option value="">All Categories</option></select>
+                <button type="button" id="adm-prod-export-csv" class="btn btn-outline btn-sm">Export CSV</button>
+                <input type="file" id="adm-prod-csv-file" accept=".csv,text/csv" class="hidden" />
+                <button type="button" id="adm-prod-import-btn" class="btn btn-primary btn-sm">Import CSV</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-products-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ORDERS VIEW -->
+        <section id="view-orders" class="view-section hidden">
+          <div class="panel-card">
+            <div class="toolbar-row">
+              <h3>Order Fulfillment</h3>
+              <div class="toolbar-controls">
+                <input type="search" id="ord-search" class="toolbar-input" placeholder="Search Order #, Phone, TrxID..." />
+                <select id="ord-status-filter" class="toolbar-select">
+                  <option value="">All Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="packed">Packed</option>
+                  <option value="shipped">Shipped</option>
+                  <option value="delivered">Delivered</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+                <button type="button" id="ord-export-csv" class="btn btn-outline btn-sm">Export CSV</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Order</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Order Status</th>
+                    <th>Tracking / Inspect</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-orders-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="adm-abandoned-panel" class="panel-card">
+            <div class="toolbar-row">
+              <div>
+                <h3>Abandoned Cart Recovery</h3>
+                <span class="muted-note">যেসব কাস্টমার কার্টে পণ্য রেখে অর্ডার শেষ করেননি তাদের ইন-অ্যাপ রিমাইন্ডার বা WhatsApp পাঠান</span>
+              </div>
+              <button type="button" id="adm-abandoned-refresh" class="btn btn-outline btn-sm">Refresh</button>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Customer / Contact</th><th>Cart Items &amp; Value</th><th>Last Active</th><th>Recovery Action</th></tr></thead>
+                <tbody id="adm-abandoned-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- E-MARKET VIEW -->
+        <section id="view-emarket" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head">
+              <h3>Add / Edit E-Market Digital Service</h3>
+              <button type="button" id="adm-em-reset" class="btn btn-ghost btn-xs hidden">Cancel Edit</button>
+            </div>
+            <form id="adm-em-form" class="grid-form">
+              <input type="hidden" id="adm-em-id" />
+              <label class="field">
+                <span>Service Title *</span>
+                <input type="text" id="adm-em-title" required minlength="2" maxlength="120" placeholder="e.g. Free Fire Diamond Top-Up" />
+              </label>
+              <label class="field">
+                <span>Category *</span>
+                <select id="adm-em-cat">
+                  <option value="game_topup">Game Top-Up</option>
+                  <option value="app_subscription">App Subscription</option>
+                  <option value="platform_subscription">Platform Subscription</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Bangla Subtitle</span>
+                <input type="text" id="adm-em-sub" maxlength="180" placeholder="ইনস্ট্যান্ট গেম ডায়মন্ড ডেলিভারি" />
+              </label>
+              <label class="field">
+                <span>Delivery ETA</span>
+                <input type="text" id="adm-em-eta" maxlength="60" value="5-15 Minutes" />
+              </label>
+              <label class="field">
+                <span>Avg Cost Price (COGS)</span>
+                <input type="number" id="adm-em-cost" min="0" value="0" placeholder="80" />
+              </label>
+              <label class="field">
+                <span>Renewal Cycle (Days, 0 = One-time)</span>
+                <input type="number" id="adm-em-renewal-days" min="0" max="365" value="0" />
+              </label>
+              <label class="field">
+                <span>Customer Input Label *</span>
+                <input type="text" id="adm-em-prompt" required minlength="2" maxlength="80" value="Player UID / Account Email" />
+              </label>
+              <label class="field">
+                <span>Input Placeholder</span>
+                <input type="text" id="adm-em-placeholder" maxlength="100" value="আপনার UID বা ইমেইল দিন" />
+              </label>
+              <label class="field field-span-2">
+                <span>Packages (Format: Label:Price, comma separated) *</span>
+                <input type="text" id="adm-em-packages" required placeholder="115 Diamonds:95, 520 Diamonds:430, Weekly Membership:160" />
+              </label>
+              <label class="field field-span-2">
+                <span>Banner Image URL *</span>
+                <div class="input-with-btn">
+                  <input type="text" id="adm-em-img" required placeholder="/src/assets/images/emarket_game_topup_1795203622838.jpg" />
+                  <button type="button" class="btn btn-outline btn-sm" data-pick-asset="adm-em-img">Studio Assets</button>
+                </div>
+              </label>
+              <label class="field field-span-2">
+                <span>Description</span>
+                <textarea id="adm-em-desc" rows="2" maxlength="1000"></textarea>
+              </label>
+              <div class="field-row field-span-2">
+                <label class="check-pill"><input type="checkbox" id="adm-em-active" checked /> Active</label>
+              </div>
+              <div class="field-span-2 form-actions">
+                <button type="submit" class="btn btn-primary">Save E-Market Service</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-head">
+              <h3>Auto PIN / Voucher Stock Vault</h3>
+              <div class="inline-actions">
+                <input type="file" id="adm-pin-csv-file" accept=".csv,text/csv" class="hidden" />
+                <button type="button" id="adm-pin-import-csv-btn" class="btn btn-primary btn-xs">Import PIN CSV</button>
+                <button type="button" id="adm-pin-refresh" class="btn btn-outline btn-xs">Refresh Stock</button>
+              </div>
+            </div>
+            <form id="adm-em-pin-form" class="grid-form">
+              <label class="field">
+                <span>E-Market Service *</span>
+                <select id="adm-pin-item" required></select>
+              </label>
+              <label class="field">
+                <span>Package *</span>
+                <select id="adm-pin-pkg" required></select>
+              </label>
+              <label class="field field-span-2">
+                <span>Voucher / Redeem Codes (1 per line or comma separated) *</span>
+                <textarea id="adm-pin-codes" rows="3" required placeholder="FF-PIN-9942-ABCD&#10;FF-PIN-7731-WXYZ"></textarea>
+              </label>
+              <div class="field-span-2 form-actions">
+                <button type="submit" class="btn btn-primary">Add PINs to Vault</button>
+              </div>
+            </form>
+            <div id="adm-em-pins-summary" class="pin-summary-row" style="margin-top:12px;"></div>
+            <div class="table-wrap" style="margin-top:12px;">
+              <table class="data-table">
+                <thead><tr><th>Service &amp; Package</th><th>PIN / Code</th><th>Added</th><th>Action</th></tr></thead>
+                <tbody id="adm-em-pins-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="toolbar-row"><h3>E-Market Catalog</h3></div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Service</th><th>Category</th><th>Packages</th><th>ETA</th><th>Actions</th></tr></thead>
+                <tbody id="admin-em-items-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="toolbar-row">
+              <h3>E-Market Orders Queue</h3>
+              <div class="toolbar-controls">
+                <input type="search" id="em-ord-search" class="toolbar-input" placeholder="Search Target UID, Order #, TrxID..." />
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Order</th><th>Package &amp; Target Account</th><th>Amount &amp; Pay</th><th>Redeem / Delivery Code</th><th>Status</th></tr></thead>
+                <tbody id="admin-em-orders-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- WALLET TOP-UPS VIEW -->
+        <section id="view-wallet" class="view-section hidden">
+          <div class="panel-card">
+            <div class="toolbar-row">
+              <div>
+                <h3>Wallet Add-Money Requests</h3>
+                <span class="muted-note">কাস্টমারদের ম্যানুয়াল অ্যাড-মানি রিকোয়েস্ট যাচাই করে Approve করুন</span>
+              </div>
+              <div class="toolbar-controls">
+                <input type="search" id="adm-wallet-search" class="toolbar-input" placeholder="Search customer, sender #, TrxID..." />
+                <select id="adm-wallet-status" class="toolbar-select">
+                  <option value="">All Requests</option>
+                  <option value="pending">Pending Only</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Request &amp; Time</th>
+                    <th>Customer</th>
+                    <th>Mode / App</th>
+                    <th>Amount &amp; Sent</th>
+                    <th>Sender &amp; TrxID</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-wallet-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDERS VIEW -->
+        <section id="view-sliders" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head"><h3>Add Hero Slider</h3></div>
+            <form id="adm-slider-form" class="grid-form">
+              <label class="field"><span>Slider Title *</span><input type="text" id="adm-sl-title" required minlength="2" maxlength="120" /></label>
+              <label class="field"><span>Badge</span><input type="text" id="adm-sl-badge" maxlength="40" placeholder="FLASH DROP" /></label>
+              <label class="field field-span-2">
+                <span>Banner Image URL *</span>
+                <div class="input-with-btn">
+                  <input type="text" id="adm-sl-img" required placeholder="/src/assets/images/slider_cyber_setup_banner_1795203622505.jpg" />
+                  <button type="button" class="btn btn-outline btn-sm" data-pick-asset="adm-sl-img">Studio Assets</button>
+                </div>
+              </label>
+              <label class="field field-span-2"><span>Subtitle (Bangla)</span><input type="text" id="adm-sl-sub" maxlength="220" /></label>
+              <label class="field"><span>CTA Label *</span><input type="text" id="adm-sl-cta" required maxlength="50" value="Explore Now" /></label>
+              <label class="field">
+                <span>Link Page</span>
+                <select id="adm-sl-target">
+                  <option value="home">Storefront Home</option>
+                  <option value="explore">Explore Catalog</option>
+                  <option value="emarket">E-Market Hub</option>
+                  <option value="cart">Cart</option>
+                  <option value="orders">My Orders</option>
+                </select>
+              </label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Publish Slider</button></div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <div class="panel-head"><h3>Hero Sliders</h3></div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Banner</th><th>Title &amp; CTA</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="admin-sliders-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- NOTICES VIEW -->
+        <section id="view-notices" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head"><h3>Publish Storefront Notice</h3></div>
+            <form id="adm-notice-form" class="grid-form">
+              <label class="field"><span>Notice Title *</span><input type="text" id="adm-nt-title" required minlength="2" maxlength="120" /></label>
+              <label class="field">
+                <span>Priority</span>
+                <select id="adm-nt-type">
+                  <option value="info">Info</option>
+                  <option value="promo">Promo</option>
+                  <option value="urgent">Urgent Alert</option>
+                </select>
+              </label>
+              <label class="field field-span-2"><span>Bangla Notice Message *</span><textarea id="adm-nt-body" rows="2" required minlength="2" maxlength="600"></textarea></label>
+              <label class="field field-span-2"><span>English Notice Message (Optional)</span><textarea id="adm-nt-body-en" rows="2" maxlength="600"></textarea></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Post Notice</button></div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <div class="panel-head"><h3>Notice Board History</h3></div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Title &amp; Message</th><th>Priority</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="admin-notices-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- NOTIFICATIONS VIEW -->
+        <section id="view-notifications" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head"><h3>Send Push Notification</h3></div>
+            <form id="adm-notif-form" class="grid-form">
+              <label class="field">
+                <span>Target Audience *</span>
+                <select id="adm-nf-target"><option value="ALL">All Customers (Broadcast)</option></select>
+              </label>
+              <label class="field">
+                <span>Alert Type</span>
+                <select id="adm-nf-type">
+                  <option value="promo">Promo</option>
+                  <option value="admin_alert">Admin Alert</option>
+                  <option value="system">System Update</option>
+                  <option value="order_update">Order Update</option>
+                </select>
+              </label>
+              <label class="field field-span-2"><span>Title *</span><input type="text" id="adm-nf-title" required minlength="2" maxlength="120" /></label>
+              <label class="field field-span-2"><span>Message *</span><textarea id="adm-nf-body" rows="2" required minlength="2" maxlength="600"></textarea></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Send Notification</button></div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <div class="panel-head"><h3>Sent Notifications</h3></div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Notification</th><th>Audience</th><th>Type</th><th>Time</th><th>Action</th></tr></thead>
+                <tbody id="admin-notifs-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- CATEGORIES VIEW -->
+        <section id="view-categories" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head"><h3>Create / Update Category</h3></div>
+            <form id="adm-cat-form" class="grid-form">
+              <label class="field"><span>Category Slug *</span><input type="text" id="adm-cat-slug" required placeholder="tech-gadgets" /></label>
+              <label class="field"><span>English Name *</span><input type="text" id="adm-cat-en" required placeholder="Tech Gadgets" /></label>
+              <label class="field"><span>Bangla Name *</span><input type="text" id="adm-cat-bn" required placeholder="টেক গ্যাজেট" /></label>
+              <label class="field"><span>Sort Order</span><input type="number" id="adm-cat-order" value="1" min="0" /></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Save Category</button></div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Slug</th><th>Bangla</th><th>English</th><th>Order</th><th>Action</th></tr></thead>
+                <tbody id="admin-cats-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- COUPONS VIEW -->
+        <section id="view-coupons" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head"><h3>Create / Update Coupon</h3></div>
+            <form id="adm-coupon-form" class="grid-form">
+              <label class="field"><span>Coupon Code *</span><input type="text" id="adm-cp-code" required placeholder="CYBER10" /></label>
+              <label class="field">
+                <span>Discount Type</span>
+                <select id="adm-cp-type">
+                  <option value="fixed">Fixed Amount</option>
+                  <option value="percent">Percentage (%)</option>
+                </select>
+              </label>
+              <label class="field"><span>Discount Value *</span><input type="number" id="adm-cp-val" min="1" required placeholder="100" /></label>
+              <label class="field"><span>Minimum Order</span><input type="number" id="adm-cp-min" min="0" value="500" /></label>
+              <label class="field"><span>Creator / Influencer Name (Optional)</span><input type="text" id="adm-cp-creator-name" maxlength="80" placeholder="e.g. Rafi Gaming" /></label>
+              <label class="field"><span>Creator Phone / bKash (Optional)</span><input type="text" id="adm-cp-creator-phone" maxlength="30" placeholder="017XXXXXXXX" /></label>
+              <label class="field"><span>Creator Commission (%)</span><input type="number" id="adm-cp-creator-pct" min="0" max="50" step="0.5" value="5" /></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Save Coupon</button></div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Code</th><th>Discount</th><th>Min Order</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="admin-coupons-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="toolbar-row">
+              <div>
+                <h3>Creator / Influencer Promo Commission Tracker</h3>
+                <span class="muted-note">ক্রিয়েটর প্রোমো কোডের ব্যবহার, মোট সেলস ও কমিশন আর্নিং ট্র্যাক করুন</span>
+              </div>
+              <button type="button" id="adm-creators-refresh" class="btn btn-outline btn-sm">Refresh</button>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Promo Code</th><th>Creator</th><th>Commission %</th><th>Uses &amp; Sales</th><th>Earned Commission</th></tr></thead>
+                <tbody id="adm-creators-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-head">
+              <div>
+                <h3>Auto Offer &amp; Buy X Get Y Builder</h3>
+                <span class="muted-note">কার্টে শর্ত পূরণ হলে অটোমেটিক ডিসকাউন্ট বা ফ্রি ডেলিভারি চালু হবে</span>
+              </div>
+            </div>
+            <form id="adm-offer-form" class="grid-form">
+              <label class="field"><span>Offer Title *</span><input type="text" id="adm-ofr-title" required maxlength="100" placeholder="Buy 2 Get 15% Off" /></label>
+              <label class="field">
+                <span>Offer Rule Type *</span>
+                <select id="adm-ofr-type">
+                  <option value="buy_x_get_pct">Buy X+ Qty → Discount %</option>
+                  <option value="bogo_half">BOGO 50% (Buy 2, 2nd 50% Off)</option>
+                  <option value="min_qty_free_ship">Min Qty → Free Delivery</option>
+                </select>
+              </label>
+              <label class="field"><span>Min Qty *</span><input type="number" id="adm-ofr-qty" min="2" max="20" value="2" required /></label>
+              <label class="field"><span>Discount % (0–60)</span><input type="number" id="adm-ofr-pct" min="0" max="60" value="15" /></label>
+              <label class="field field-span-2"><span>Target Category (Optional, blank = All Products)</span><input type="text" id="adm-ofr-cat" maxlength="60" placeholder="e.g. tech-gadgets" /></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Publish Auto Offer</button></div>
+            </form>
+            <div class="table-wrap" style="margin-top:12px;">
+              <table class="data-table">
+                <thead><tr><th>Offer Title</th><th>Rule</th><th>Condition</th><th>Action</th></tr></thead>
+                <tbody id="adm-offers-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TICKETS VIEW -->
+        <section id="view-tickets" class="view-section hidden">
+          <div class="panel-card">
+            <div class="toolbar-row">
+              <h3>Customer Support Tickets</h3>
+              <select id="tkt-status-filter" class="toolbar-select">
+                <option value="">All Tickets</option>
+                <option value="open">Open</option>
+                <option value="in_progress">In Progress</option>
+                <option value="resolved">Resolved</option>
+              </select>
+            </div>
+            <div id="admin-tickets-list" class="tickets-stack"></div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-head">
+              <div>
+                <h3>Pre-Purchase Live Support Chats</h3>
+                <span class="muted-note">স্টোরফ্রন্ট থেকে কাস্টমারদের লাইভ সাপোর্ট মেসেজের উত্তর দিন</span>
+              </div>
+              <button type="button" id="adm-chat-refresh-btn" class="btn btn-outline btn-xs">Refresh Chats</button>
+            </div>
+            <div id="adm-support-chats-list" class="tickets-stack"></div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-head">
+              <div>
+                <h3>Customer FAQ Knowledge Base</h3>
+                <span class="muted-note">কাস্টমার হেল্প প্যানেলের FAQ যোগ বা আপডেট করুন</span>
+              </div>
+              <button type="button" id="adm-faq-reset" class="btn btn-ghost btn-xs hidden">Cancel Edit</button>
+            </div>
+            <form id="adm-faq-form" class="grid-form">
+              <input type="hidden" id="adm-faq-id" />
+              <label class="field">
+                <span>Category</span>
+                <input type="text" id="adm-faq-cat" maxlength="50" value="General" placeholder="Delivery / Payment / E-Market" />
+              </label>
+              <label class="field">
+                <span>Question *</span>
+                <input type="text" id="adm-faq-q" required minlength="3" maxlength="200" placeholder="ডেলিভারি কতদিনে পাবো?" />
+              </label>
+              <label class="field field-span-2">
+                <span>Answer *</span>
+                <textarea id="adm-faq-a" rows="2" required minlength="2" maxlength="1000" placeholder="ঢাকার ভেতরে ২৪-৪৮ ঘণ্টা ও ঢাকার বাইরে ২-৪ কার্যদিবসে..."></textarea>
+              </label>
+              <div class="field-span-2 form-actions">
+                <button type="submit" class="btn btn-primary btn-sm">Save FAQ</button>
+              </div>
+            </form>
+            <div id="adm-faqs-list" class="tickets-stack" style="margin-top:14px;"></div>
+          </div>
+        </section>
+
+        <!-- CUSTOMERS CRM VIEW (NX-ID, WALLET +/-, BAN/UNBAN, RESELLER) -->
+        <section id="view-users" class="view-section hidden">
+          <div class="panel-card">
+            <div class="toolbar-row">
+              <div>
+                <h3>Customers CRM &amp; Wallet Control</h3>
+                <span class="muted-note">প্রত্যেক ইউজারের ইউনিক NX-XXXXXX আইডি, ওয়ালেট (+/-), ব্যান/আনব্যান এবং রিসেলার অনুমোদন</span>
+              </div>
+              <div class="toolbar-controls">
+                <input type="search" id="adm-u-search" class="toolbar-input" placeholder="Search Name, Email, Phone, NX-ID..." />
+                <select id="adm-u-filter" class="toolbar-select">
+                  <option value="">All Customers</option>
+                  <option value="reseller_pending">Reseller Requests</option>
+                  <option value="reseller">Approved Resellers</option>
+                  <option value="banned">Banned Users</option>
+                </select>
+                <button type="button" id="adm-u-sync-ids" class="btn btn-outline btn-sm">Assign Missing NX-IDs</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Customer &amp; NX-ID</th><th>Phone &amp; Zone</th><th>Wallet &amp; Tier</th><th>Orders &amp; Spent</th><th>Actions</th></tr></thead>
+                <tbody id="admin-users-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-head">
+              <div>
+                <h3>Reseller Profit Withdrawals Queue</h3>
+                <span class="muted-note">রিসেলারদের প্রফিট উইথড্রয়াল রিকোয়েস্ট Approve বা Reject করুন</span>
+              </div>
+              <button type="button" id="adm-rwd-refresh-btn" class="btn btn-outline btn-xs">Refresh Queue</button>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Request &amp; Reseller</th>
+                    <th>Amount</th>
+                    <th>Payout Method</th>
+                    <th>Status</th>
+                    <th>Review Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-reseller-withdrawals-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- RETURNS & PHOTO DISPUTES VIEW -->
+        <section id="view-returns" class="view-section hidden">
+          <div class="panel-card">
+            <div class="toolbar-row">
+              <div>
+                <h3>Returns, Replacements &amp; Photo Disputes</h3>
+                <span class="muted-note">কাস্টমারের আনবক্সিং/ড্যামেজ ছবি যাচাই করে ওয়ালেট রিফান্ড বা রিপ্লেসমেন্ট অনুমোদন করুন</span>
+              </div>
+              <select id="adm-ret-filter" class="toolbar-select">
+                <option value="">All Requests</option>
+                <option value="pending">Pending Review</option>
+                <option value="approved">Approved / Refunded</option>
+                <option value="replacement">Replacement Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Order &amp; Customer</th><th>Type &amp; Reason</th><th>Evidence Photo</th><th>Amount</th><th>Status &amp; Actions</th></tr></thead>
+                <tbody id="admin-returns-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIRAL REELS STUDIO VIEW -->
+        <section id="view-reels" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head"><h3>Publish Shoppable Viral Reel</h3></div>
+            <form id="adm-reel-form" class="grid-form">
+              <label class="field"><span>Reel Title *</span><input type="text" id="adm-rl-title" required maxlength="100" placeholder="Levitating Lamp Night Setup" /></label>
+              <label class="field"><span>Badge Tag</span><input type="text" id="adm-rl-badge" maxlength="30" placeholder="TikTok Viral" /></label>
+              <label class="field"><span>Video URL (MP4 / YouTube Shorts)</span><input type="url" id="adm-rl-video" maxlength="500" placeholder="https://..." /></label>
+              <label class="field">
+                <span>Poster / Thumbnail Image *</span>
+                <div class="input-with-btn">
+                  <input type="text" id="adm-rl-poster" required placeholder="/src/assets/images/product_levitating_lamp_1795121290698.jpg" />
+                  <button type="button" class="btn btn-outline btn-sm" data-pick-asset="adm-rl-poster">Assets</button>
+                </div>
+              </label>
+              <label class="field field-span-2"><span>Link Storefront Product</span><select id="adm-rl-prod"></select></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Publish Reel</button></div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Reel</th><th>Linked Product</th><th>Likes</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="admin-reels-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCHEDULED CAMPAIGNS VIEW -->
+        <section id="view-campaigns" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head"><h3>Create Scheduled Campaign / Flash Sale</h3></div>
+            <form id="adm-campaign-form" class="grid-form">
+              <label class="field"><span>Campaign Title *</span><input type="text" id="adm-cmp-title" required maxlength="100" placeholder="Eid Mega Flash Sale" /></label>
+              <label class="field"><span>Auto Discount % (1–50) *</span><input type="number" id="adm-cmp-pct" min="1" max="50" value="10" required /></label>
+              <label class="field"><span>Start Date &amp; Time *</span><input type="datetime-local" id="adm-cmp-start" required /></label>
+              <label class="field"><span>End Date &amp; Time *</span><input type="datetime-local" id="adm-cmp-end" required /></label>
+              <label class="field"><span>Min Order (৳)</span><input type="number" id="adm-cmp-min" min="0" value="500" /></label>
+              <label class="field"><span>Banner Note (Bangla)</span><input type="text" id="adm-cmp-note" maxlength="160" placeholder="সকল অর্ডারে ফ্ল্যাট ১০% ইনস্ট্যান্ট ডিসকাউন্ট!" /></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Schedule Campaign</button></div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Campaign</th><th>Discount</th><th>Schedule Window</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="admin-campaigns-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOURNAMENTS & CUSTOM ROOM HUB VIEW -->
+        <section id="view-tournaments" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head">
+              <h3>Create / Edit Gaming Tournament &amp; Protected Room</h3>
+              <button type="button" id="adm-tr-reset" class="btn btn-ghost btn-xs hidden">Cancel Edit</button>
+            </div>
+            <form id="adm-tournament-form" class="grid-form">
+              <input type="hidden" id="adm-tr-id" />
+              <label class="field"><span>Tournament Title *</span><input type="text" id="adm-tr-title" required maxlength="120" placeholder="Friday Free Fire Squad Clash" /></label>
+              <label class="field"><span>Game Name *</span><input type="text" id="adm-tr-game" required maxlength="40" value="Free Fire" /></label>
+              <label class="field">
+                <span>Tournament Mode</span>
+                <select id="adm-tr-mode">
+                  <option value="solo">Solo</option>
+                  <option value="duo">Duo</option>
+                  <option value="squad">Squad</option>
+                </select>
+              </label>
+              <label class="field"><span>Entry Fee (৳, 0 = Free)</span><input type="number" id="adm-tr-fee" min="0" value="50" /></label>
+              <label class="field"><span>Prize Pool (৳) *</span><input type="number" id="adm-tr-prize" min="0" value="1500" required /></label>
+              <label class="field"><span>Max Slots *</span><input type="number" id="adm-tr-slots" min="2" max="200" value="48" required /></label>
+              <label class="field"><span>Match Start Time *</span><input type="datetime-local" id="adm-tr-time" required /></label>
+              <label class="field"><span>Custom Room ID (Joined Players Only)</span><input type="text" id="adm-tr-room-id" maxlength="80" placeholder="88492014" /></label>
+              <label class="field"><span>Custom Room Password (Protected)</span><input type="text" id="adm-tr-room-pass" maxlength="80" placeholder="NX7788" /></label>
+              <label class="field">
+                <span>Match Status</span>
+                <select id="adm-tr-status">
+                  <option value="open">Open for Registration</option>
+                  <option value="live">Live / Room Ready</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </label>
+              <label class="field"><span>Banner Image URL</span><input type="text" id="adm-tr-img" value="/src/assets/images/emarket_game_topup_1795203622838.jpg" /></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Save Tournament &amp; Room Secret</button></div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Tournament</th><th>Fee &amp; Prize</th><th>Slots</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="admin-tournaments-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAKE ORDER SHIELD & BLACKLIST VIEW -->
+        <section id="view-blacklist" class="view-section hidden">
+          <div class="panel-card">
+            <div class="panel-head">
+              <div><h3>Add Phone / Email to Fake Order Blacklist</h3><span class="muted-note">ব্ল্যাকলিস্ট করা ফোন বা জিমেইল থেকে নতুন অর্ডার স্বয়ংক্রিয়ভাবে ব্লক হবে</span></div>
+            </div>
+            <form id="adm-blacklist-form" class="grid-form">
+              <label class="field"><span>Phone Number (e.g. 017...)</span><input type="text" id="adm-bl-phone" maxlength="30" placeholder="01712345678" /></label>
+              <label class="field"><span>Email (Optional)</span><input type="email" id="adm-bl-email" maxlength="120" placeholder="fraud@example.com" /></label>
+              <label class="field field-span-2"><span>Reason *</span><input type="text" id="adm-bl-reason" required maxlength="200" placeholder="Fake TrxID / Repeated COD Return" /></label>
+              <div class="field-span-2 form-actions"><button type="submit" class="btn btn-danger">Add to Shield Blacklist</button></div>
+            </form>
+          </div>
+          <div class="panel-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Identifier</th><th>Reason</th><th>Blocked At</th><th>Action</th></tr></thead>
+                <tbody id="admin-blacklist-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Bar -->
+  <nav id="admin-mobile-nav" class="admin-mobile-nav hidden"></nav>
+
+  <!-- Order / E-Market Detail Modal -->
+  <div id="order-detail-modal" class="modal-backdrop hidden">
+    <div class="modal-card modal-wide">
+      <div class="modal-head no-print">
+        <h3 id="odm-title">Order Inspection</h3>
+        <div class="inline-actions">
+          <button type="button" id="odm-print-btn" class="btn btn-outline btn-xs">🖨 Print / Save PDF</button>
+          <button type="button" id="odm-close" class="btn btn-ghost btn-xs">✕</button>
+        </div>
+      </div>
+      <div id="adm-order-lock-banner" class="lock-banner hidden no-print"></div>
+      <div id="odm-body" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Studio Asset Picker Modal -->
+  <div id="asset-picker-modal" class="modal-backdrop hidden">
+    <div class="modal-card modal-wide">
+      <div class="modal-head">
+        <h3>Select Verified Studio Asset</h3>
+        <button type="button" id="apm-close" class="btn btn-ghost btn-xs">✕</button>
+      </div>
+      <div id="apm-grid" class="asset-grid"></div>
+    </div>
+  </div>
+
+  <div id="admin-toast" class="toast hidden"></div>
+
+  <script type="module" src="/admin/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "ViralDrop BD",
+  "description": "Bilingual futuristic tri-app viral shopping platform with User Storefront, Normal Admin Console, and exclusive Main Admin Vault.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
