@@ -339,6 +339,10 @@
                 <span>Group Buy Team Size (2–10)</span>
                 <input type="number" id="pf-groupbuy-size" min="2" max="10" value="2" />
               </label>
+              <label class="field">
+                <span>Advance Delivery Charge (৳)</span>
+                <input type="number" id="pf-adv-deliv-fee" min="0" max="50000" value="0" placeholder="0 = zone fee" />
+              </label>
               <label class="field field-span-2">
                 <span>Product Image URL *</span>
                 <div class="input-with-btn">
@@ -368,6 +372,7 @@
                 <label class="check-pill"><input type="checkbox" id="pf-preorder" /> Pre-Order Item</label>
                 <label class="check-pill"><input type="checkbox" id="pf-groupbuy" /> Enable Group Buy</label>
                 <label class="check-pill"><input type="checkbox" id="pf-emi" /> 0% EMI Eligible</label>
+                <label class="check-pill"><input type="checkbox" id="pf-adv-deliv" /> Advance Delivery Required</label>
                 <label class="check-pill"><input type="checkbox" id="pf-active" checked /> Active</label>
               </div>
               <div class="field-span-2 form-actions">
@@ -656,7 +661,12 @@
                   <option value="emarket">E-Market Hub</option>
                   <option value="cart">Cart</option>
                   <option value="orders">My Orders</option>
+                  <option value="product">Specific Product · নির্দিষ্ট প্রোডাক্ট</option>
                 </select>
+              </label>
+              <label class="field field-span-2">
+                <span>Linked Product (Optional · সিলেক্ট করলে ক্লিকেই ওই প্রোডাক্টে যাবে)</span>
+                <select id="adm-sl-prod"><option value="">— কোনো নির্দিষ্ট প্রোডাক্ট নয় (Page লিংক) —</option></select>
               </label>
               <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Publish Slider</button></div>
             </form>

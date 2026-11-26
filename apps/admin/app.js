@@ -328,11 +328,12 @@ function syncDynamicListeners() {
     }, (e) => handleFirestoreError(e, OperationType.LIST, 'categories'))
   );
 
-  ensureListener('products', canSeeView('products') || canSeeView('reels'), () =>
+  ensureListener('products', canSeeView('products') || canSeeView('reels') || canSeeView('sliders'), () =>
     onSnapshot(query(collection(db, 'products'), orderBy('createdAt', 'desc')), (snap) => {
       state.products = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       renderProducts();
       renderReels();
+      renderSliders();
       renderOverview();
     }, (e) => handleFirestoreError(e, OperationType.LIST, 'products'))
   );
@@ -788,7 +789,7 @@ function renderProducts() {
             <img src="${esc(p.imageUrl)}" alt="" class="thumb-img" />
             <div>
               <strong>${esc(p.title)}</strong>
-              <div class="cell-sub">${esc(p.viralSource || p.subtitleBn || 'Standard')}${p.isPreOrder ? ' · Pre-Order' : ''}${p.groupBuyEnabled ? ' · Group Buy' : ''}</div>
+              <div class="cell-sub">${esc(p.viralSource || p.subtitleBn || 'Standard')}${p.isPreOrder ? ' · Pre-Order' : ''}${p.groupBuyEnabled ? ' · Group Buy' : ''}${p.requireAdvanceDelivery ? ` · 🚚 Adv Deliv${p.advanceDeliveryFeeBdt ? ': ' + money(p.advanceDeliveryFeeBdt) : ''}` : ''}</div>
             </div>
           </div>
         </td>
@@ -1022,13 +1023,23 @@ function renderWalletRequests() {
 }
 
 function renderSliders() {
+  const slProdSel = document.getElementById('adm-sl-prod');
+  if (slProdSel) {
+    const curSl = slProdSel.value;
+    slProdSel.innerHTML = '<option value="">— কোনো নির্দিষ্ট প্রোডাক্ট নয় (Page লিংক) —</option>' +
+      state.products.map((p) => `<option value="${esc(p.id)}">${esc(p.title)} (${money(p.priceBdt)})</option>`).join('');
+    if (curSl) slProdSel.value = curSl;
+  }
   const tbody = document.getElementById('admin-sliders-tbody');
   if (!tbody) return;
   tbody.innerHTML = state.sliders.length
-    ? state.sliders.map((sl) => `
+    ? state.sliders.map((sl) => {
+      const lp = sl.linkPage === 'product' && sl.linkTarget ? state.products.find((p) => p.id === sl.linkTarget) : null;
+      const routeLabel = sl.linkPage === 'product' ? `📦 ${lp ? lp.title : (sl.linkTarget || 'Product')}` : sl.linkPage;
+      return `
       <tr>
         <td><img src="${esc(sl.imageUrl)}" alt="" class="banner-thumb" /></td>
-        <td><strong>${esc(sl.title)}</strong><div class="cell-sub">${esc(sl.ctaLabel || 'Explore')} → ${esc(sl.linkPage)}</div></td>
+        <td><strong>${esc(sl.title)}</strong><div class="cell-sub">${esc(sl.ctaLabel || 'Explore')} → ${esc(routeLabel)}</div></td>
         <td><span class="status-pill ${sl.isActive !== false ? 'badge-delivered' : 'badge-cancelled'}">${sl.isActive !== false ? 'Active' : 'Paused'}</span></td>
         <td>
           <div class="inline-actions">
@@ -1037,7 +1048,8 @@ function renderSliders() {
           </div>
         </td>
       </tr>
-    `).join('')
+    `;
+    }).join('')
     : '<tr><td colspan="4" class="muted-note">No sliders published yet.</td></tr>';
 }
 
@@ -2702,6 +2714,8 @@ function bindEvents() {
       variantDetails,
       fbtProductIds,
       emiEligible: document.getElementById('pf-emi')?.checked || false,
+      requireAdvanceDelivery: document.getElementById('pf-adv-deliv')?.checked || false,
+      advanceDeliveryFeeBdt: Math.min(50000, Math.max(0, Number(document.getElementById('pf-adv-deliv-fee')?.value) || 0)),
       isPreOrder: document.getElementById('pf-preorder')?.checked || false,
       preOrderDepositPct: Math.min(100, Math.max(10, parseInt(document.getElementById('pf-preorder-pct')?.value, 10) || 30)),
       preOrderEta: (document.getElementById('pf-preorder-eta')?.value || '').trim().slice(0, 60),
@@ -2790,6 +2804,8 @@ function bindEvents() {
       document.getElementById('pf-desc').value = p.description || '';
       if (document.getElementById('pf-fbt')) document.getElementById('pf-fbt').value = Array.isArray(p.fbtProductIds) ? p.fbtProductIds.join(', ') : '';
       if (document.getElementById('pf-emi')) document.getElementById('pf-emi').checked = !!p.emiEligible;
+      if (document.getElementById('pf-adv-deliv')) document.getElementById('pf-adv-deliv').checked = !!p.requireAdvanceDelivery;
+      if (document.getElementById('pf-adv-deliv-fee')) document.getElementById('pf-adv-deliv-fee').value = Number(p.advanceDeliveryFeeBdt || 0);
       document.getElementById('pf-featured').checked = !!p.isFeatured;
       document.getElementById('pf-flash').checked = !!p.isFlashDrop;
       document.getElementById('pf-active').checked = p.isActive !== false;
@@ -3957,18 +3973,28 @@ function bindEvents() {
   });
 
   // Slider Form
+  document.getElementById('adm-sl-prod')?.addEventListener('change', (ev) => {
+    if (ev.target.value) {
+      const sel = document.getElementById('adm-sl-target');
+      if (sel) sel.value = 'product';
+    }
+  });
   document.getElementById('adm-slider-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!hasPerm('canManageSliders')) return showToast('Action not allowed.');
     try {
+      const prodId = document.getElementById('adm-sl-prod')?.value || '';
+      const rawPage = document.getElementById('adm-sl-target').value;
+      const linkPage = prodId ? 'product' : rawPage;
+      const linkTarget = prodId ? prodId.slice(0, 120) : '';
       await addDoc(collection(db, 'sliders'), {
         title: document.getElementById('adm-sl-title').value.trim().slice(0, 120),
         subtitleBn: document.getElementById('adm-sl-sub').value.trim().slice(0, 220),
         badgeText: document.getElementById('adm-sl-badge').value.trim().slice(0, 40),
         imageUrl: document.getElementById('adm-sl-img').value.trim().slice(0, 500),
         ctaLabel: (document.getElementById('adm-sl-cta').value.trim() || 'Explore Now').slice(0, 50),
-        linkPage: document.getElementById('adm-sl-target').value,
-        linkTarget: '',
+        linkPage,
+        linkTarget,
         sortOrder: state.sliders.length + 1,
         isActive: true,
         createdBy: currentUser.uid,
