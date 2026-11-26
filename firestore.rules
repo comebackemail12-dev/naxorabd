@@ -255,7 +255,7 @@ service cloud.firestore {
           'isFeatured', 'isFlashDrop', 'isActive', 'salesCount',
           'isPreOrder', 'preOrderDepositPct', 'preOrderEta',
           'groupBuyEnabled', 'groupBuyPriceBdt', 'groupBuySize',
-          'resellerPriceBdt', 'emiEligible', 'fbtProductIds', 'createdBy', 'createdAt', 'updatedAt'
+          'resellerPriceBdt', 'emiEligible', 'requireAdvanceDelivery', 'advanceDeliveryFeeBdt', 'fbtProductIds', 'createdBy', 'createdAt', 'updatedAt'
         ]) &&
         data.title is string && data.title.size() >= 2 && data.title.size() <= 120 &&
         data.subtitleBn is string && data.subtitleBn.size() <= 160 &&
@@ -280,6 +280,8 @@ service cloud.firestore {
         (!('groupBuySize' in data) || (data.groupBuySize is int && data.groupBuySize >= 2 && data.groupBuySize <= 10)) &&
         (!('resellerPriceBdt' in data) || (data.resellerPriceBdt is number && data.resellerPriceBdt >= 0)) &&
         (!('emiEligible' in data) || data.emiEligible is bool) &&
+        (!('requireAdvanceDelivery' in data) || data.requireAdvanceDelivery is bool) &&
+        (!('advanceDeliveryFeeBdt' in data) || (data.advanceDeliveryFeeBdt is number && data.advanceDeliveryFeeBdt >= 0 && data.advanceDeliveryFeeBdt <= 50000)) &&
         (!('fbtProductIds' in data) || (data.fbtProductIds is list && data.fbtProductIds.size() <= 8)) &&
         data.isFeatured is bool &&
         data.isFlashDrop is bool &&
@@ -297,7 +299,7 @@ service cloud.firestore {
           'isFeatured', 'isFlashDrop', 'isActive', 'salesCount',
           'isPreOrder', 'preOrderDepositPct', 'preOrderEta',
           'groupBuyEnabled', 'groupBuyPriceBdt', 'groupBuySize',
-          'resellerPriceBdt', 'emiEligible', 'fbtProductIds', 'updatedAt'
+          'resellerPriceBdt', 'emiEligible', 'requireAdvanceDelivery', 'advanceDeliveryFeeBdt', 'fbtProductIds', 'updatedAt'
         ]) &&
         (!('createdBy' in prev) || data.createdBy == prev.createdBy) &&
         (!('createdAt' in prev) || data.createdAt == prev.createdAt) &&
@@ -327,6 +329,8 @@ service cloud.firestore {
         (!isChanged(data, prev, 'groupBuySize') || (data.groupBuySize is int && data.groupBuySize >= 2 && data.groupBuySize <= 10)) &&
         (!isChanged(data, prev, 'resellerPriceBdt') || (data.resellerPriceBdt is number && data.resellerPriceBdt >= 0)) &&
         (!isChanged(data, prev, 'emiEligible') || data.emiEligible is bool) &&
+        (!isChanged(data, prev, 'requireAdvanceDelivery') || data.requireAdvanceDelivery is bool) &&
+        (!isChanged(data, prev, 'advanceDeliveryFeeBdt') || (data.advanceDeliveryFeeBdt is number && data.advanceDeliveryFeeBdt >= 0 && data.advanceDeliveryFeeBdt <= 50000)) &&
         (!isChanged(data, prev, 'fbtProductIds') || (data.fbtProductIds is list && data.fbtProductIds.size() <= 8)) &&
         data.updatedAt is timestamp;
     }
@@ -674,7 +678,7 @@ service cloud.firestore {
         data.badgeText is string && data.badgeText.size() <= 40 &&
         data.imageUrl is string && data.imageUrl.size() >= 1 && data.imageUrl.size() <= 500 &&
         data.ctaLabel is string && data.ctaLabel.size() >= 1 && data.ctaLabel.size() <= 50 &&
-        data.linkPage in ['home', 'explore', 'emarket', 'cart', 'orders'] &&
+        data.linkPage in ['home', 'explore', 'emarket', 'cart', 'orders', 'product'] &&
         data.linkTarget is string && data.linkTarget.size() <= 120 &&
         data.sortOrder is int &&
         data.isActive is bool &&
@@ -692,7 +696,7 @@ service cloud.firestore {
         (!isChanged(data, prev, 'badgeText') || (data.badgeText is string && data.badgeText.size() <= 40)) &&
         (!isChanged(data, prev, 'imageUrl') || (data.imageUrl is string && data.imageUrl.size() >= 1 && data.imageUrl.size() <= 500)) &&
         (!isChanged(data, prev, 'ctaLabel') || (data.ctaLabel is string && data.ctaLabel.size() >= 1 && data.ctaLabel.size() <= 50)) &&
-        (!isChanged(data, prev, 'linkPage') || data.linkPage in ['home', 'explore', 'emarket', 'cart', 'orders']) &&
+        (!isChanged(data, prev, 'linkPage') || data.linkPage in ['home', 'explore', 'emarket', 'cart', 'orders', 'product']) &&
         (!isChanged(data, prev, 'linkTarget') || (data.linkTarget is string && data.linkTarget.size() <= 120)) &&
         (!isChanged(data, prev, 'sortOrder') || data.sortOrder is int) &&
         (!isChanged(data, prev, 'isActive') || data.isActive is bool) &&
