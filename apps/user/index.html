@@ -1117,6 +1117,24 @@
           </div>
 
           <div id="cod-notice-box" class="cod-notice-box hidden"></div>
+          <div id="chk-cod-adv-box" class="gateway-details-box hidden">
+            <div style="font-size:12.5px;font-weight:700;color:var(--amber);">🚚 ডেলিভারি চার্জ অগ্রিম পরিশোধ বাধ্যতামূলক (<span id="chk-adv-amt" class="mono-num">৳0</span>)</div>
+            <p class="muted-text" style="margin:0;font-size:12px;">পণ্যের বাকি টাকা (<strong id="chk-adv-due" class="mono-num">৳0</strong>) ডেলিভারির সময় ক্যাশ অন ডেলিভারিতে পরিশোধ করবেন।</p>
+            <div id="chk-adv-methods" class="wallet-app-grid" style="grid-template-columns:repeat(3,1fr);">
+              <button type="button" class="wallet-app-btn active" data-adv-pay="manual">📱 ম্যানুয়াল</button>
+              <button type="button" class="wallet-app-btn" data-adv-pay="auto">⚡ অটো</button>
+              <button type="button" class="wallet-app-btn" data-adv-pay="wallet">💰 ওয়ালেট</button>
+            </div>
+            <div id="chk-adv-manual-fields">
+              <div id="chk-adv-apps" class="wallet-app-grid" style="margin-bottom:6px;"></div>
+              <div class="merchant-copy-row"><span>Account: <strong id="chk-adv-merchant" class="mono-num"></strong></span><button id="chk-adv-copy-btn" type="button" class="btn-ghost" style="min-height:28px;padding:3px 9px;font-size:11.5px;">Copy</button></div>
+              <div class="form-grid-2" style="margin-top:6px;">
+                <input id="chk-adv-sender" type="tel" maxlength="25" placeholder="যে নম্বর থেকে পাঠিয়েছেন (01...)" />
+                <input id="chk-adv-trx" type="text" maxlength="60" placeholder="TrxID (e.g. BKH12345)" />
+              </div>
+            </div>
+            <div id="chk-adv-wallet-info" class="hidden muted-text" style="font-size:12px;"></div>
+          </div>
 
           <div id="chk-rewards-toggle-box" class="rewards-redeem-box hidden">
             <label class="inline-check" style="justify-content:space-between;width:100%;">
@@ -1657,6 +1675,21 @@
           </div>
           <div id="exp-wallet-box" class="gateway-details-box hidden">
             <span class="muted-text" style="font-size:12.5px;">ওয়ালেট ব্যালেন্স: <strong id="exp-wallet-avail" class="mono-num text-emerald">৳0</strong></span>
+          </div>
+          <div id="exp-cod-adv-box" class="gateway-details-box hidden">
+            <div style="font-size:12px;font-weight:700;color:var(--amber);">🚚 অগ্রিম ডেলিভারি চার্জ: <span id="exp-adv-amt" class="mono-num">৳0</span> <span class="muted-text">(বাকি <span id="exp-adv-due" class="mono-num">৳0</span> COD)</span></div>
+            <div id="exp-adv-methods" class="wallet-app-grid" style="grid-template-columns:repeat(3,1fr);">
+              <button type="button" class="wallet-app-btn active" data-exp-adv-pay="manual">📱 ম্যানুয়াল</button>
+              <button type="button" class="wallet-app-btn" data-exp-adv-pay="auto">⚡ অটো</button>
+              <button type="button" class="wallet-app-btn" data-exp-adv-pay="wallet">💰 ওয়ালেট</button>
+            </div>
+            <div id="exp-adv-manual-fields">
+              <div class="merchant-copy-row" style="margin-bottom:6px;"><span>Send to (<span id="exp-adv-app-lbl">bKash</span>): <strong id="exp-adv-merchant" class="mono-num"></strong></span></div>
+              <div class="form-grid-2">
+                <input id="exp-adv-sender" type="tel" maxlength="25" placeholder="Sender 01XXXXXXXXX" />
+                <input id="exp-adv-trx" type="text" maxlength="60" placeholder="TrxID (e.g. BKH12345)" />
+              </div>
+            </div>
           </div>
           <div class="checkout-totals">
             <div class="summary-line total-line"><strong>সর্বমোট প্রদেয়</strong><strong id="exp-total-val" class="mono-num">৳0</strong></div>
