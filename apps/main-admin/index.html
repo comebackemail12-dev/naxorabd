@@ -733,6 +733,7 @@
               <label class="field"><span>Pre-Order Deposit % (10–100)</span><input type="number" id="vp-preorder-pct" min="10" max="100" value="30" /></label>
               <label class="field"><span>Group Buy Team Price (৳)</span><input type="number" id="vp-groupbuy-price" min="0" value="0" /></label>
               <label class="field"><span>Group Buy Team Size (2–10)</span><input type="number" id="vp-groupbuy-size" min="2" max="10" value="2" /></label>
+              <label class="field"><span>Advance Delivery Charge (৳)</span><input type="number" id="vp-adv-deliv-fee" min="0" max="50000" value="0" placeholder="0 = default zone fee" /></label>
               <label class="field field-span-2"><span>Variant-Linked Price, Stock &amp; Image (Optional, 1 per line: Name | Price | Stock | ImageURL)</span><textarea id="vp-variant-details" rows="2" maxlength="3000" placeholder="Warm Moon | 2490 | 12 | /src/assets/images/...&#10;Cyber Blue | 2690 | 8 | /src/assets/images/..."></textarea></label>
               <label class="field field-span-2"><span>Description</span><textarea id="vp-desc" rows="2" maxlength="1500"></textarea></label>
               <label class="field field-span-2">
@@ -745,6 +746,7 @@
                 <label class="check-pill"><input type="checkbox" id="vp-preorder" /> Pre-Order Item</label>
                 <label class="check-pill"><input type="checkbox" id="vp-groupbuy" /> Enable Group Buy Deal</label>
                 <label class="check-pill"><input type="checkbox" id="vp-emi" /> 0% EMI Eligible</label>
+                <label class="check-pill"><input type="checkbox" id="vp-adv-deliv" /> Advance Delivery Required</label>
                 <label class="check-pill"><input type="checkbox" id="vp-active" checked /> Active</label>
               </div>
               <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Save Product</button></div>
@@ -902,9 +904,14 @@
                   <option value="emarket">E-Market Hub</option>
                   <option value="cart">Cart</option>
                   <option value="orders">My Orders</option>
+                  <option value="product">Specific Product · নির্দিষ্ট প্রোডাক্ট</option>
                 </select>
               </label>
-              <label class="field field-span-2"><span>Optional Category / Search Filter</span><input type="text" id="v-sl-target" maxlength="120" placeholder="e.g. gaming or lamp" /></label>
+              <label class="field">
+                <span>Linked Product (Optional · সিলেক্ট করলে ক্লিকেই প্রোডাক্টে যাবে)</span>
+                <select id="v-sl-prod"><option value="">— কোনো নির্দিষ্ট প্রোডাক্ট নয় —</option></select>
+              </label>
+              <label class="field"><span>Optional Category / Search Filter</span><input type="text" id="v-sl-target" maxlength="120" placeholder="e.g. gaming or lamp" /></label>
               <div class="field-span-2 form-actions"><button type="submit" class="btn btn-primary">Publish Slider</button></div>
             </form>
           </div>

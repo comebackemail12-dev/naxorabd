@@ -913,6 +913,13 @@ function renderProducts() {
     if (curRl) rlProdSel.value = curRl;
   }
 
+  const slProdSel = document.getElementById('v-sl-prod');
+  if (slProdSel) {
+    const curSl = slProdSel.value;
+    slProdSel.innerHTML = '<option value="">— কোনো নির্দিষ্ট প্রোডাক্ট নয় —</option>' + state.products.map((p) => `<option value="${esc(p.id)}">${esc(p.title)} (${money(p.priceBdt)})</option>`).join('');
+    if (curSl) slProdSel.value = curSl;
+  }
+
   const threshold = Math.max(1, Number(storeConfig.lowStockThreshold ?? 5));
   const lowItems = state.products.filter((p) => p.isActive !== false && Number(p.stock || 0) <= threshold);
   const lowPanel = document.getElementById('v-low-stock-panel');
@@ -938,7 +945,7 @@ function renderProducts() {
         <td>
           <div class="thumb-cell">
             <img src="${esc(p.imageUrl || DEFAULT_LOGO)}" alt="" class="thumb-img" />
-            <div><strong>${esc(p.title)}</strong><div class="cell-sub">${esc(p.viralSource || p.subtitleBn || 'Standard')}${p.isPreOrder ? ' · Pre-Order' : ''}${p.groupBuyEnabled ? ' · Group Buy' : ''}</div></div>
+            <div><strong>${esc(p.title)}</strong><div class="cell-sub">${esc(p.viralSource || p.subtitleBn || 'Standard')}${p.isPreOrder ? ' · Pre-Order' : ''}${p.groupBuyEnabled ? ' · Group Buy' : ''}${p.requireAdvanceDelivery ? ` · 🚚 Adv Deliv${p.advanceDeliveryFeeBdt ? ': ' + money(p.advanceDeliveryFeeBdt) : ''}` : ''}</div></div>
           </div>
         </td>
         <td>${esc(p.categoryId)}</td>
@@ -1113,10 +1120,13 @@ function renderSliders() {
   const tbody = document.getElementById('v-sliders-tbody');
   if (!tbody) return;
   tbody.innerHTML = state.sliders.length
-    ? state.sliders.map((s) => `
+    ? state.sliders.map((s) => {
+      const lp = s.linkPage === 'product' && s.linkTarget ? state.products.find((p) => p.id === s.linkTarget) : null;
+      const routeLabel = s.linkPage === 'product' ? `📦 ${lp ? lp.title : (s.linkTarget || 'Product')}` : s.linkPage;
+      return `
       <tr>
         <td><img src="${esc(s.imageUrl)}" alt="" class="banner-thumb" /></td>
-        <td><strong>${esc(s.title)}</strong><div class="cell-sub">${esc(s.ctaLabel)} → ${esc(s.linkPage)}</div></td>
+        <td><strong>${esc(s.title)}</strong><div class="cell-sub">${esc(s.ctaLabel)} → ${esc(routeLabel)}</div></td>
         <td><span class="status-pill ${s.isActive !== false ? 'badge-approved' : 'badge-cancelled'}">${s.isActive !== false ? 'Active' : 'Paused'}</span></td>
         <td>
           <div class="inline-actions">
@@ -1125,7 +1135,8 @@ function renderSliders() {
           </div>
         </td>
       </tr>
-    `).join('')
+    `;
+    }).join('')
     : '<tr><td colspan="4" class="muted-note">No sliders yet.</td></tr>';
 }
 
@@ -2611,7 +2622,7 @@ function attachVaultListeners() {
   sub('orders', query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(250)), () => { renderAnalytics(); renderOrders(); renderUsersCrm(); renderAdmins(); }, 'orders', (o, id) => {
     showToast(`${(o.isResellerOrder || o.isDropship) ? '🤝 নতুন রিসেলার অর্ডার' : '🛍️ নতুন অর্ডার'} #${o.orderNumber || id.slice(0, 6)} · ${money(o.totalBdt || 0)}`);
   });
-  sub('products', query(collection(db, 'products'), orderBy('createdAt', 'desc')), () => { renderAnalytics(); renderProducts(); renderReels(); }, 'products');
+  sub('products', query(collection(db, 'products'), orderBy('createdAt', 'desc')), () => { renderAnalytics(); renderProducts(); renderReels(); renderSliders(); }, 'products');
   sub('emarketItems', query(collection(db, 'emarketItems'), orderBy('createdAt', 'desc')), () => { renderAnalytics(); renderEMarket(); }, 'emarketItems');
   sub('emarketOrders', query(collection(db, 'emarketOrders'), orderBy('createdAt', 'desc'), limit(250)), () => { renderAnalytics(); renderEMarket(); renderAdmins(); }, 'emarketOrders', (eo, id) => {
     showToast(`🎮 নতুন E-Market অর্ডার #${eo.orderNumber || id.slice(0, 6)} · ${eo.itemTitle || ''}`);
@@ -3715,6 +3726,8 @@ function bindEvents() {
       document.getElementById('vp-desc').value = p.description || '';
       if (document.getElementById('vp-fbt')) document.getElementById('vp-fbt').value = Array.isArray(p.fbtProductIds) ? p.fbtProductIds.join(', ') : '';
       if (document.getElementById('vp-emi')) document.getElementById('vp-emi').checked = !!p.emiEligible;
+      if (document.getElementById('vp-adv-deliv')) document.getElementById('vp-adv-deliv').checked = !!p.requireAdvanceDelivery;
+      if (document.getElementById('vp-adv-deliv-fee')) document.getElementById('vp-adv-deliv-fee').value = Number(p.advanceDeliveryFeeBdt || 0);
       document.getElementById('vp-featured').checked = !!p.isFeatured;
       document.getElementById('vp-flash').checked = !!p.isFlashDrop;
       document.getElementById('vp-active').checked = p.isActive !== false;
@@ -4597,6 +4610,8 @@ function bindEvents() {
       variantDetails,
       fbtProductIds,
       emiEligible: document.getElementById('vp-emi')?.checked || false,
+      requireAdvanceDelivery: document.getElementById('vp-adv-deliv')?.checked || false,
+      advanceDeliveryFeeBdt: Math.min(50000, Math.max(0, Number(document.getElementById('vp-adv-deliv-fee')?.value) || 0)),
       isPreOrder: document.getElementById('vp-preorder')?.checked || false,
       preOrderDepositPct: Math.min(100, Math.max(10, parseInt(document.getElementById('vp-preorder-pct')?.value, 10) || 30)),
       preOrderEta: (document.getElementById('vp-preorder-eta')?.value || '').trim().slice(0, 60),
@@ -4773,17 +4788,27 @@ function bindEvents() {
   });
 
   // Sliders, Notices, Notifications, Coupons, Categories
+  document.getElementById('v-sl-prod')?.addEventListener('change', (ev) => {
+    if (ev.target.value) {
+      const sel = document.getElementById('v-sl-page');
+      if (sel) sel.value = 'product';
+    }
+  });
   document.getElementById('v-slider-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     try {
+      const prodId = document.getElementById('v-sl-prod')?.value || '';
+      const rawPage = document.getElementById('v-sl-page').value;
+      const linkPage = prodId ? 'product' : rawPage;
+      const linkTarget = prodId ? prodId.slice(0, 120) : document.getElementById('v-sl-target').value.trim().slice(0, 120);
       await addDoc(collection(db, 'sliders'), {
         title: document.getElementById('v-sl-title').value.trim().slice(0, 120),
         subtitleBn: document.getElementById('v-sl-sub').value.trim().slice(0, 220),
         badgeText: document.getElementById('v-sl-badge').value.trim().slice(0, 40),
         imageUrl: document.getElementById('v-sl-img').value.trim().slice(0, 500) || DEFAULT_LOGO,
         ctaLabel: (document.getElementById('v-sl-cta').value.trim() || 'Explore').slice(0, 50),
-        linkPage: document.getElementById('v-sl-page').value,
-        linkTarget: document.getElementById('v-sl-target').value.trim().slice(0, 120),
+        linkPage,
+        linkTarget,
         sortOrder: state.sliders.length + 1,
         isActive: true,
         createdBy: currentOwner.uid,
