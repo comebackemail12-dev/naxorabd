@@ -734,7 +734,9 @@
               <label class="field"><span>Pre-Order Deposit % (10–100)</span><input type="number" id="vp-preorder-pct" min="10" max="100" value="30" /></label>
               <label class="field"><span>Group Buy Team Price (৳)</span><input type="number" id="vp-groupbuy-price" min="0" value="0" /></label>
               <label class="field"><span>Group Buy Team Size (2–10)</span><input type="number" id="vp-groupbuy-size" min="2" max="10" value="2" /></label>
-              <label class="field"><span>Advance Delivery Charge (৳)</span><input type="number" id="vp-adv-deliv-fee" min="0" max="50000" value="0" placeholder="0 = auto Dhaka / Outside Dhaka" /><small id="vp-adv-deliv-hint" class="muted-note"></small></label>
+              <label class="field"><span>Inside Dhaka Delivery (৳ · ঢাকার ভেতরে)</span><input type="number" id="vp-deliv-dhaka" min="0" max="50000" placeholder="খালি রাখলে সেটিংস থেকে" /></label>
+              <label class="field"><span>Outside Dhaka Delivery (৳ · ঢাকার বাইরে)</span><input type="number" id="vp-deliv-outside" min="0" max="50000" placeholder="খালি রাখলে সেটিংস থেকে" /></label>
+              <label class="field"><span>Fixed Advance Override (৳, 0 = ঢাকা/বাইরের চার্জ)</span><input type="number" id="vp-adv-deliv-fee" min="0" max="50000" value="0" placeholder="0 = use Dhaka / Outside Dhaka" /><small id="vp-adv-deliv-hint" class="muted-note"></small></label>
               <label class="field field-span-2"><span>Variant-Linked Price, Stock &amp; Image (Optional, 1 per line: Name | Price | Stock | ImageURL)</span><textarea id="vp-variant-details" rows="2" maxlength="3000" placeholder="Warm Moon | 2490 | 12 | /src/assets/images/...&#10;Cyber Blue | 2690 | 8 | /src/assets/images/..."></textarea></label>
               <label class="field field-span-2"><span>Description</span><textarea id="vp-desc" rows="2" maxlength="1500"></textarea></label>
               <label class="field field-span-2">
