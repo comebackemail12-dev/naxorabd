@@ -88,7 +88,7 @@ let isGoogleSignInBusy = false;
 let adminProfile = null;
 let isOwner = false;
 let currentView = 'overview';
-let storeConfig = { brandName: 'Naxora Bd', brandLogoUrl: DEFAULT_LOGO, currencySymbol: '৳', adminAppEnabled: true, supportPhone: '', supportEmail: '', lowStockThreshold: 5, resellerDefaultDiscountPct: 8 };
+let storeConfig = { brandName: 'Naxora Bd', brandLogoUrl: DEFAULT_LOGO, currencySymbol: '৳', adminAppEnabled: true, supportPhone: '', supportEmail: '', lowStockThreshold: 5, resellerDefaultDiscountPct: 8, deliveryInsideDhakaBdt: 60, deliveryOutsideDhakaBdt: 120, codAdvanceDeliveryOutsideDhaka: false, codAdvanceDeliveryAll: false };
 let assetPickerTargetId = null;
 let unsubAdmModalChat = null;
 let activeAdmOrderLockKey = '';
@@ -252,6 +252,23 @@ function syncBrandUI() {
     const el = document.getElementById(id);
     if (el) el.textContent = name;
   });
+  if (typeof updatePfAdvDelivHint === 'function') updatePfAdvDelivHint();
+}
+
+function updatePfAdvDelivHint() {
+  const hint = document.getElementById('pf-adv-deliv-hint');
+  if (!hint) return;
+  const dhakaFee = Number(storeConfig.deliveryInsideDhakaBdt ?? 60);
+  const outsideFee = Number(storeConfig.deliveryOutsideDhakaBdt ?? 120);
+  const prodAdvOn = document.getElementById('pf-adv-deliv')?.checked || false;
+  const customFee = Number(document.getElementById('pf-adv-deliv-fee')?.value || 0);
+  if (customFee > 0) {
+    hint.textContent = `ফিক্সড অগ্রিম ${money(customFee)} (০ দিলে ঢাকা ${money(dhakaFee)} / বাইরে ${money(outsideFee)} অটো নেবে)`;
+  } else if (prodAdvOn || storeConfig.codAdvanceDeliveryAll) {
+    hint.textContent = `✅ অটো অগ্রিম: ঢাকার ভেতরে ${money(dhakaFee)} · ঢাকার বাইরে ${money(outsideFee)}`;
+  } else {
+    hint.textContent = `০ রাখলে অটো: ঢাকার ভেতরে ${money(dhakaFee)} · ঢাকার বাইরে ${money(outsideFee)}`;
+  }
 }
 
 function syncNavPermissions() {
@@ -789,7 +806,7 @@ function renderProducts() {
             <img src="${esc(p.imageUrl)}" alt="" class="thumb-img" />
             <div>
               <strong>${esc(p.title)}</strong>
-              <div class="cell-sub">${esc(p.viralSource || p.subtitleBn || 'Standard')}${p.isPreOrder ? ' · Pre-Order' : ''}${p.groupBuyEnabled ? ' · Group Buy' : ''}${p.requireAdvanceDelivery ? ` · 🚚 Adv Deliv${p.advanceDeliveryFeeBdt ? ': ' + money(p.advanceDeliveryFeeBdt) : ''}` : ''}</div>
+              <div class="cell-sub">${esc(p.viralSource || p.subtitleBn || 'Standard')}${p.isPreOrder ? ' · Pre-Order' : ''}${p.groupBuyEnabled ? ' · Group Buy' : ''}${(p.requireAdvanceDelivery || storeConfig.codAdvanceDeliveryAll) ? ` · 🚚 Adv Deliv: ${p.requireAdvanceDelivery && Number(p.advanceDeliveryFeeBdt || 0) > 0 ? money(p.advanceDeliveryFeeBdt) : `ঢাকা ${money(storeConfig.deliveryInsideDhakaBdt ?? 60)} / বাইরে ${money(storeConfig.deliveryOutsideDhakaBdt ?? 120)}`}` : ''}</div>
             </div>
           </div>
         </td>
@@ -2679,8 +2696,14 @@ function bindEvents() {
     document.getElementById('product-form').reset();
     document.getElementById('pf-form-title').textContent = 'Create New Product';
     document.getElementById('pf-reset-btn').classList.add('hidden');
+    updatePfAdvDelivHint();
     syncNavPermissions();
   };
+  ['pf-adv-deliv', 'pf-adv-deliv-fee'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', updatePfAdvDelivHint);
+  });
+  updatePfAdvDelivHint();
   document.getElementById('pf-reset-btn').addEventListener('click', resetProdForm);
 
   document.getElementById('product-form').addEventListener('submit', async (e) => {
@@ -2811,6 +2834,7 @@ function bindEvents() {
       document.getElementById('pf-active').checked = p.isActive !== false;
       document.getElementById('pf-form-title').textContent = `Edit: ${p.title}`;
       document.getElementById('pf-reset-btn').classList.remove('hidden');
+      updatePfAdvDelivHint();
       syncNavPermissions();
       switchView('products');
       window.scrollTo({ top: 0, behavior: 'smooth' });
