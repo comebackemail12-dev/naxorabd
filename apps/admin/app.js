@@ -257,17 +257,23 @@ function syncBrandUI() {
 
 function updatePfAdvDelivHint() {
   const hint = document.getElementById('pf-adv-deliv-hint');
+  const dInEl = document.getElementById('pf-deliv-dhaka');
+  const dOutEl = document.getElementById('pf-deliv-outside');
+  const fallbackDhaka = Number(storeConfig.deliveryInsideDhakaBdt ?? 60);
+  const fallbackOutside = Number(storeConfig.deliveryOutsideDhakaBdt ?? 120);
+  if (dInEl) dInEl.placeholder = `অটো (সেটিংস: ${money(fallbackDhaka)})`;
+  if (dOutEl) dOutEl.placeholder = `অটো (সেটিংস: ${money(fallbackOutside)})`;
   if (!hint) return;
-  const dhakaFee = Number(storeConfig.deliveryInsideDhakaBdt ?? 60);
-  const outsideFee = Number(storeConfig.deliveryOutsideDhakaBdt ?? 120);
+  const dhakaFee = dInEl && String(dInEl.value).trim() !== '' ? Math.max(0, Number(dInEl.value) || 0) : fallbackDhaka;
+  const outsideFee = dOutEl && String(dOutEl.value).trim() !== '' ? Math.max(0, Number(dOutEl.value) || 0) : fallbackOutside;
   const prodAdvOn = document.getElementById('pf-adv-deliv')?.checked || false;
   const customFee = Number(document.getElementById('pf-adv-deliv-fee')?.value || 0);
-  if (customFee > 0) {
-    hint.textContent = `ফিক্সড অগ্রিম ${money(customFee)} (০ দিলে ঢাকা ${money(dhakaFee)} / বাইরে ${money(outsideFee)} অটো নেবে)`;
+  if (customFee > 0 && !(dInEl && String(dInEl.value).trim() !== '') && !(dOutEl && String(dOutEl.value).trim() !== '')) {
+    hint.textContent = `ফিক্সড অগ্রিম ${money(customFee)} (০ দিলে ঢাকা ${money(dhakaFee)} / বাইরে ${money(outsideFee)} নেবে)`;
   } else if (prodAdvOn || storeConfig.codAdvanceDeliveryAll) {
     hint.textContent = `✅ অটো অগ্রিম: ঢাকার ভেতরে ${money(dhakaFee)} · ঢাকার বাইরে ${money(outsideFee)}`;
   } else {
-    hint.textContent = `০ রাখলে অটো: ঢাকার ভেতরে ${money(dhakaFee)} · ঢাকার বাইরে ${money(outsideFee)}`;
+    hint.textContent = `ডেলিভারি: ঢাকার ভেতরে ${money(dhakaFee)} · ঢাকার বাইরে ${money(outsideFee)}`;
   }
 }
 
@@ -806,7 +812,15 @@ function renderProducts() {
             <img src="${esc(p.imageUrl)}" alt="" class="thumb-img" />
             <div>
               <strong>${esc(p.title)}</strong>
-              <div class="cell-sub">${esc(p.viralSource || p.subtitleBn || 'Standard')}${p.isPreOrder ? ' · Pre-Order' : ''}${p.groupBuyEnabled ? ' · Group Buy' : ''}${(p.requireAdvanceDelivery || storeConfig.codAdvanceDeliveryAll) ? ` · 🚚 Adv Deliv: ${p.requireAdvanceDelivery && Number(p.advanceDeliveryFeeBdt || 0) > 0 ? money(p.advanceDeliveryFeeBdt) : `ঢাকা ${money(storeConfig.deliveryInsideDhakaBdt ?? 60)} / বাইরে ${money(storeConfig.deliveryOutsideDhakaBdt ?? 120)}`}` : ''}</div>
+              <div class="cell-sub">${esc(p.viralSource || p.subtitleBn || 'Standard')}${p.isPreOrder ? ' · Pre-Order' : ''}${p.groupBuyEnabled ? ' · Group Buy' : ''}${(() => {
+                const hasCustomZone = (p.deliveryInsideDhakaBdt !== undefined && p.deliveryInsideDhakaBdt !== null && Number(p.deliveryInsideDhakaBdt) >= 0) || (p.deliveryOutsideDhakaBdt !== undefined && p.deliveryOutsideDhakaBdt !== null && Number(p.deliveryOutsideDhakaBdt) >= 0);
+                const inF = (p.deliveryInsideDhakaBdt !== undefined && p.deliveryInsideDhakaBdt !== null && Number(p.deliveryInsideDhakaBdt) >= 0) ? Number(p.deliveryInsideDhakaBdt) : Number(storeConfig.deliveryInsideDhakaBdt ?? 60);
+                const outF = (p.deliveryOutsideDhakaBdt !== undefined && p.deliveryOutsideDhakaBdt !== null && Number(p.deliveryOutsideDhakaBdt) >= 0) ? Number(p.deliveryOutsideDhakaBdt) : Number(storeConfig.deliveryOutsideDhakaBdt ?? 120);
+                if (p.requireAdvanceDelivery || storeConfig.codAdvanceDeliveryAll) {
+                  return ` · 🚚 Adv Deliv: ${!hasCustomZone && p.requireAdvanceDelivery && Number(p.advanceDeliveryFeeBdt || 0) > 0 ? money(p.advanceDeliveryFeeBdt) : `ঢাকা ${money(inF)} / বাইরে ${money(outF)}`}`;
+                }
+                return hasCustomZone ? ` · 🚚 Deliv: ঢাকা ${money(inF)} / বাইরে ${money(outF)}` : '';
+              })()}</div>
             </div>
           </div>
         </td>
@@ -2699,7 +2713,7 @@ function bindEvents() {
     updatePfAdvDelivHint();
     syncNavPermissions();
   };
-  ['pf-adv-deliv', 'pf-adv-deliv-fee'].forEach((id) => {
+  ['pf-adv-deliv', 'pf-adv-deliv-fee', 'pf-deliv-dhaka', 'pf-deliv-outside'].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', updatePfAdvDelivHint);
   });
@@ -2739,6 +2753,8 @@ function bindEvents() {
       emiEligible: document.getElementById('pf-emi')?.checked || false,
       requireAdvanceDelivery: document.getElementById('pf-adv-deliv')?.checked || false,
       advanceDeliveryFeeBdt: Math.min(50000, Math.max(0, Number(document.getElementById('pf-adv-deliv-fee')?.value) || 0)),
+      deliveryInsideDhakaBdt: (() => { const v = String(document.getElementById('pf-deliv-dhaka')?.value ?? '').trim(); return v === '' ? -1 : Math.min(50000, Math.max(0, Number(v) || 0)); })(),
+      deliveryOutsideDhakaBdt: (() => { const v = String(document.getElementById('pf-deliv-outside')?.value ?? '').trim(); return v === '' ? -1 : Math.min(50000, Math.max(0, Number(v) || 0)); })(),
       isPreOrder: document.getElementById('pf-preorder')?.checked || false,
       preOrderDepositPct: Math.min(100, Math.max(10, parseInt(document.getElementById('pf-preorder-pct')?.value, 10) || 30)),
       preOrderEta: (document.getElementById('pf-preorder-eta')?.value || '').trim().slice(0, 60),
@@ -2829,6 +2845,8 @@ function bindEvents() {
       if (document.getElementById('pf-emi')) document.getElementById('pf-emi').checked = !!p.emiEligible;
       if (document.getElementById('pf-adv-deliv')) document.getElementById('pf-adv-deliv').checked = !!p.requireAdvanceDelivery;
       if (document.getElementById('pf-adv-deliv-fee')) document.getElementById('pf-adv-deliv-fee').value = Number(p.advanceDeliveryFeeBdt || 0);
+      if (document.getElementById('pf-deliv-dhaka')) document.getElementById('pf-deliv-dhaka').value = (p.deliveryInsideDhakaBdt !== undefined && p.deliveryInsideDhakaBdt !== null && Number(p.deliveryInsideDhakaBdt) >= 0) ? Number(p.deliveryInsideDhakaBdt) : '';
+      if (document.getElementById('pf-deliv-outside')) document.getElementById('pf-deliv-outside').value = (p.deliveryOutsideDhakaBdt !== undefined && p.deliveryOutsideDhakaBdt !== null && Number(p.deliveryOutsideDhakaBdt) >= 0) ? Number(p.deliveryOutsideDhakaBdt) : '';
       document.getElementById('pf-featured').checked = !!p.isFeatured;
       document.getElementById('pf-flash').checked = !!p.isFlashDrop;
       document.getElementById('pf-active').checked = p.isActive !== false;

@@ -340,8 +340,16 @@
                 <input type="number" id="pf-groupbuy-size" min="2" max="10" value="2" />
               </label>
               <label class="field">
-                <span>Advance Delivery Charge (৳)</span>
-                <input type="number" id="pf-adv-deliv-fee" min="0" max="50000" value="0" placeholder="0 = auto Dhaka / Outside Dhaka" />
+                <span>Inside Dhaka Delivery (৳ · ঢাকার ভেতরে)</span>
+                <input type="number" id="pf-deliv-dhaka" min="0" max="50000" placeholder="খালি রাখলে সেটিংস থেকে" />
+              </label>
+              <label class="field">
+                <span>Outside Dhaka Delivery (৳ · ঢাকার বাইরে)</span>
+                <input type="number" id="pf-deliv-outside" min="0" max="50000" placeholder="খালি রাখলে সেটিংস থেকে" />
+              </label>
+              <label class="field">
+                <span>Fixed Advance Override (৳, 0 = ঢাকা/বাইরের চার্জ)</span>
+                <input type="number" id="pf-adv-deliv-fee" min="0" max="50000" value="0" placeholder="0 = use Dhaka / Outside Dhaka" />
                 <small id="pf-adv-deliv-hint" class="muted-note"></small>
               </label>
               <label class="field field-span-2">
