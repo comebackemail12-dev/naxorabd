@@ -506,7 +506,8 @@
                 <label class="check-pill"><input type="checkbox" id="gw-auto-sandbox" /> Auto Gateway Sandbox Label</label>
                 <label class="check-pill"><input type="checkbox" id="gw-wallet-on" /> Customer Wallet Enabled</label>
                 <label class="check-pill"><input type="checkbox" id="gw-cod-on" /> Cash on Delivery (COD)</label>
-                <label class="check-pill"><input type="checkbox" id="gw-cod-adv" /> Require Advance Delivery Outside Dhaka</label>
+                <label class="check-pill"><input type="checkbox" id="gw-cod-adv" /> Require Advance Delivery Outside Dhaka Only (শুধুমাত্র ঢাকার বাইরে অগ্রিম)</label>
+                <label class="check-pill"><input type="checkbox" id="gw-cod-adv-all" /> Require Advance Delivery (Dhaka &amp; Outside · সব জায়গায় ডেলিভারি চার্জ অগ্রিম)</label>
                 <label class="check-pill"><input type="checkbox" id="gw-heaven-on" /> HeavenPay Master Switch</label>
                 <label class="check-pill"><input type="checkbox" id="gw-bkash-on" /> bKash Wallet Active</label>
                 <label class="check-pill"><input type="checkbox" id="gw-nagad-on" /> Nagad Wallet Active</label>
@@ -733,7 +734,7 @@
               <label class="field"><span>Pre-Order Deposit % (10–100)</span><input type="number" id="vp-preorder-pct" min="10" max="100" value="30" /></label>
               <label class="field"><span>Group Buy Team Price (৳)</span><input type="number" id="vp-groupbuy-price" min="0" value="0" /></label>
               <label class="field"><span>Group Buy Team Size (2–10)</span><input type="number" id="vp-groupbuy-size" min="2" max="10" value="2" /></label>
-              <label class="field"><span>Advance Delivery Charge (৳)</span><input type="number" id="vp-adv-deliv-fee" min="0" max="50000" value="0" placeholder="0 = default zone fee" /></label>
+              <label class="field"><span>Advance Delivery Charge (৳)</span><input type="number" id="vp-adv-deliv-fee" min="0" max="50000" value="0" placeholder="0 = auto Dhaka / Outside Dhaka" /><small id="vp-adv-deliv-hint" class="muted-note"></small></label>
               <label class="field field-span-2"><span>Variant-Linked Price, Stock &amp; Image (Optional, 1 per line: Name | Price | Stock | ImageURL)</span><textarea id="vp-variant-details" rows="2" maxlength="3000" placeholder="Warm Moon | 2490 | 12 | /src/assets/images/...&#10;Cyber Blue | 2690 | 8 | /src/assets/images/..."></textarea></label>
               <label class="field field-span-2"><span>Description</span><textarea id="vp-desc" rows="2" maxlength="1500"></textarea></label>
               <label class="field field-span-2">
