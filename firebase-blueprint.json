@@ -168,6 +168,8 @@
         "emiEligible": { "type": "boolean" },
         "requireAdvanceDelivery": { "type": "boolean" },
         "advanceDeliveryFeeBdt": { "type": "number" },
+        "deliveryInsideDhakaBdt": { "type": "number" },
+        "deliveryOutsideDhakaBdt": { "type": "number" },
         "fbtProductIds": { "type": "array" },
         "salesCount": { "type": "integer" },
         "createdBy": { "type": "string", "maxLength": 128 },

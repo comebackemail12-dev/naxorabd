@@ -257,7 +257,7 @@ service cloud.firestore {
           'isFeatured', 'isFlashDrop', 'isActive', 'salesCount',
           'isPreOrder', 'preOrderDepositPct', 'preOrderEta',
           'groupBuyEnabled', 'groupBuyPriceBdt', 'groupBuySize',
-          'resellerPriceBdt', 'emiEligible', 'requireAdvanceDelivery', 'advanceDeliveryFeeBdt', 'fbtProductIds', 'createdBy', 'createdAt', 'updatedAt'
+          'resellerPriceBdt', 'emiEligible', 'requireAdvanceDelivery', 'advanceDeliveryFeeBdt', 'deliveryInsideDhakaBdt', 'deliveryOutsideDhakaBdt', 'fbtProductIds', 'createdBy', 'createdAt', 'updatedAt'
         ]) &&
         data.title is string && data.title.size() >= 2 && data.title.size() <= 120 &&
         data.subtitleBn is string && data.subtitleBn.size() <= 160 &&
@@ -284,6 +284,8 @@ service cloud.firestore {
         (!('emiEligible' in data) || data.emiEligible is bool) &&
         (!('requireAdvanceDelivery' in data) || data.requireAdvanceDelivery is bool) &&
         (!('advanceDeliveryFeeBdt' in data) || (data.advanceDeliveryFeeBdt is number && data.advanceDeliveryFeeBdt >= 0 && data.advanceDeliveryFeeBdt <= 50000)) &&
+        (!('deliveryInsideDhakaBdt' in data) || (data.deliveryInsideDhakaBdt is number && data.deliveryInsideDhakaBdt >= -1 && data.deliveryInsideDhakaBdt <= 50000)) &&
+        (!('deliveryOutsideDhakaBdt' in data) || (data.deliveryOutsideDhakaBdt is number && data.deliveryOutsideDhakaBdt >= -1 && data.deliveryOutsideDhakaBdt <= 50000)) &&
         (!('fbtProductIds' in data) || (data.fbtProductIds is list && data.fbtProductIds.size() <= 8)) &&
         data.isFeatured is bool &&
         data.isFlashDrop is bool &&
@@ -301,7 +303,7 @@ service cloud.firestore {
           'isFeatured', 'isFlashDrop', 'isActive', 'salesCount',
           'isPreOrder', 'preOrderDepositPct', 'preOrderEta',
           'groupBuyEnabled', 'groupBuyPriceBdt', 'groupBuySize',
-          'resellerPriceBdt', 'emiEligible', 'requireAdvanceDelivery', 'advanceDeliveryFeeBdt', 'fbtProductIds', 'updatedAt'
+          'resellerPriceBdt', 'emiEligible', 'requireAdvanceDelivery', 'advanceDeliveryFeeBdt', 'deliveryInsideDhakaBdt', 'deliveryOutsideDhakaBdt', 'fbtProductIds', 'updatedAt'
         ]) &&
         (!('createdBy' in prev) || data.createdBy == prev.createdBy) &&
         (!('createdAt' in prev) || data.createdAt == prev.createdAt) &&
@@ -333,6 +335,8 @@ service cloud.firestore {
         (!isChanged(data, prev, 'emiEligible') || data.emiEligible is bool) &&
         (!isChanged(data, prev, 'requireAdvanceDelivery') || data.requireAdvanceDelivery is bool) &&
         (!isChanged(data, prev, 'advanceDeliveryFeeBdt') || (data.advanceDeliveryFeeBdt is number && data.advanceDeliveryFeeBdt >= 0 && data.advanceDeliveryFeeBdt <= 50000)) &&
+        (!isChanged(data, prev, 'deliveryInsideDhakaBdt') || (data.deliveryInsideDhakaBdt is number && data.deliveryInsideDhakaBdt >= -1 && data.deliveryInsideDhakaBdt <= 50000)) &&
+        (!isChanged(data, prev, 'deliveryOutsideDhakaBdt') || (data.deliveryOutsideDhakaBdt is number && data.deliveryOutsideDhakaBdt >= -1 && data.deliveryOutsideDhakaBdt <= 50000)) &&
         (!isChanged(data, prev, 'fbtProductIds') || (data.fbtProductIds is list && data.fbtProductIds.size() <= 8)) &&
         data.updatedAt is timestamp;
     }
