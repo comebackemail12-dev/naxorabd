@@ -93,6 +93,8 @@ service cloud.firestore {
         data.manualPayEnabled is bool &&
         data.autoPayEnabled is bool &&
         data.walletEnabled is bool &&
+        (!('codAdvanceDeliveryOutsideDhaka' in data) || data.codAdvanceDeliveryOutsideDhaka is bool) &&
+        (!('codAdvanceDeliveryAll' in data) || data.codAdvanceDeliveryAll is bool) &&
         (!('gatewayFeePercent' in data) || (data.gatewayFeePercent is number && data.gatewayFeePercent >= 0 && data.gatewayFeePercent <= 25)) &&
         (!('comboMinQty' in data) || (data.comboMinQty is int && data.comboMinQty >= 2 && data.comboMinQty <= 20)) &&
         (!('lowStockThreshold' in data) || (data.lowStockThreshold is int && data.lowStockThreshold >= 1 && data.lowStockThreshold <= 100)) &&
@@ -119,7 +121,7 @@ service cloud.firestore {
           'flashDropEnabled', 'flashDropEndIso',
           'reviewsEnabled', 'couponsEnabled', 'wishlistEnabled', 'ticketsEnabled',
           'slidersEnabled', 'noticesEnabled', 'eMarketEnabled',
-          'codEnabled', 'codMinOrderBdt', 'codMaxOrderBdt', 'codAdvanceDeliveryOutsideDhaka',
+          'codEnabled', 'codMinOrderBdt', 'codMaxOrderBdt', 'codAdvanceDeliveryOutsideDhaka', 'codAdvanceDeliveryAll',
           'deliveryInsideDhakaBdt', 'deliveryOutsideDhakaBdt', 'deliveryExpressBdt',
           'freeDeliveryThresholdBdt', 'heavenPayEnabled',
           'manualPayEnabled', 'autoPayEnabled', 'autoPayProvider', 'autoPaySandbox', 'walletEnabled',
@@ -152,7 +154,7 @@ service cloud.firestore {
           'flashDropEnabled', 'flashDropEndIso',
           'reviewsEnabled', 'couponsEnabled', 'wishlistEnabled', 'ticketsEnabled',
           'slidersEnabled', 'noticesEnabled', 'eMarketEnabled',
-          'codEnabled', 'codMinOrderBdt', 'codMaxOrderBdt', 'codAdvanceDeliveryOutsideDhaka',
+          'codEnabled', 'codMinOrderBdt', 'codMaxOrderBdt', 'codAdvanceDeliveryOutsideDhaka', 'codAdvanceDeliveryAll',
           'deliveryInsideDhakaBdt', 'deliveryOutsideDhakaBdt', 'deliveryExpressBdt',
           'freeDeliveryThresholdBdt', 'heavenPayEnabled',
           'manualPayEnabled', 'autoPayEnabled', 'autoPayProvider', 'autoPaySandbox', 'walletEnabled',
@@ -179,7 +181,7 @@ service cloud.firestore {
           'flashDropEnabled', 'flashDropEndIso',
           'reviewsEnabled', 'couponsEnabled', 'wishlistEnabled', 'ticketsEnabled',
           'slidersEnabled', 'noticesEnabled', 'eMarketEnabled',
-          'codEnabled', 'codMinOrderBdt', 'codMaxOrderBdt', 'codAdvanceDeliveryOutsideDhaka',
+          'codEnabled', 'codMinOrderBdt', 'codMaxOrderBdt', 'codAdvanceDeliveryOutsideDhaka', 'codAdvanceDeliveryAll',
           'deliveryInsideDhakaBdt', 'deliveryOutsideDhakaBdt', 'deliveryExpressBdt',
           'freeDeliveryThresholdBdt', 'heavenPayEnabled',
           'manualPayEnabled', 'autoPayEnabled', 'autoPayProvider', 'autoPaySandbox', 'walletEnabled',

@@ -53,6 +53,7 @@
         "codMinOrderBdt": { "type": "number" },
         "codMaxOrderBdt": { "type": "number" },
         "codAdvanceDeliveryOutsideDhaka": { "type": "boolean" },
+        "codAdvanceDeliveryAll": { "type": "boolean" },
         "deliveryInsideDhakaBdt": { "type": "number" },
         "deliveryOutsideDhakaBdt": { "type": "number" },
         "deliveryExpressBdt": { "type": "number" },
