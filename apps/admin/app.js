@@ -1129,20 +1129,67 @@ function renderNotifications() {
     : '<tr><td colspan="5" class="muted-note">No notifications sent.</td></tr>';
 }
 
+const ADMIN_VEC_ICONS = {
+  smartphone: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
+  headphones: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>',
+  watch: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6"/><polyline points="12 10 12 12 13 13"/><path d="M16.13 7.66l-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05"/><path d="M7.88 16.36l.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05"/></svg>',
+  gamepad: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="3"/></svg>',
+  laptop: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><line x1="2" y1="20" x2="22" y2="20"/></svg>',
+  shirt: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
+  shoes: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-3a2 2 0 0 1 2-2h2l3-4 2 2 4 2a4 4 0 0 1 3 3.8V16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><line x1="4" y1="15" x2="20" y2="15"/></svg>',
+  bag: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+  lamp: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>',
+  home: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  camera: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+  sparkles: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.8L18.6 9.6l-4.8 1.8L12 16.2l-1.8-4.8L5.4 9.6l4.8-1.8L12 3z"/><path d="M5 17l.9 2.1L8 20l-2.1.9L5 23l-.9-2.1L2 20l2.1-.9L5 17z"/><path d="M19 3l.7 1.5L21.2 5l-1.5.7L19 7.2l-.7-1.5L16.8 5l1.5-.7L19 3z"/></svg>',
+  gift: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H4v4"/><path d="M4 12v8h16v-8"/><path d="M12 8v12"/><path d="M12 8c-1.5-2.5-5-2-5 0h5z"/><path d="M12 8c1.5-2.5 5-2 5 0h-5z"/></svg>',
+  gem: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 18 3 22 9 12 21 2 9 6 3"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
+  zap: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  music: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+  tv: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>',
+  book: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  dumbbell: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11"/><path d="M21 21l-1-1"/><path d="M3 3l1 1"/><path d="M18 22l4-4"/><path d="M2 6l4-4"/><path d="M3 10l7-7"/><path d="M14 21l7-7"/></svg>',
+  coffee: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
+  heart: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+  crown: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><line x1="4" y1="20" x2="20" y2="20"/></svg>',
+  glasses: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="14" r="4"/><circle cx="18" cy="14" r="4"/><line x1="10" y1="14" x2="14" y2="14"/></svg>',
+  flame: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+  package: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5"/><path d="M12 12v9"/><path d="M12 12L4 7.5"/></svg>'
+};
+const ADMIN_EMOJI_TO_VEC = { '📱': 'smartphone', '📲': 'smartphone', '🎧': 'headphones', '🎙️': 'headphones', '🎤': 'headphones', '⌚': 'watch', '⏱️': 'watch', '🎮': 'gamepad', '🕹️': 'gamepad', '💻': 'laptop', '🖥️': 'laptop', '👕': 'shirt', '👔': 'shirt', '👗': 'shirt', '👟': 'shoes', '👠': 'shoes', '🎒': 'bag', '🛍️': 'bag', '🛒': 'bag', '💡': 'lamp', '🏠': 'home', '🏡': 'home', '📷': 'camera', '🎥': 'camera', '💄': 'sparkles', '✨': 'sparkles', '🎁': 'gift', '🧸': 'gift', '💍': 'gem', '💎': 'gem', '🔌': 'zap', '⚡': 'zap', '🎵': 'music', '📺': 'tv', '📚': 'book', '🏋️': 'dumbbell', '☕': 'coffee', '❤️': 'heart', '👑': 'crown', '🕶️': 'glasses', '👓': 'glasses', '🔥': 'flame', '📦': 'package' };
+
+function formatCatIconPreview(iconVal) {
+  const v = String(iconVal || '').trim();
+  if (!v) return `<span class="cat-icon-preview">${ADMIN_VEC_ICONS.package}</span>`;
+  const cleanKey = v.startsWith('icon:') ? v.slice(5).trim().toLowerCase() : v.toLowerCase();
+  if (ADMIN_VEC_ICONS[cleanKey]) return `<span class="cat-icon-preview">${ADMIN_VEC_ICONS[cleanKey]}</span>`;
+  for (const [emo, vecKey] of Object.entries(ADMIN_EMOJI_TO_VEC)) {
+    if (v.includes(emo) && ADMIN_VEC_ICONS[vecKey]) return `<span class="cat-icon-preview">${ADMIN_VEC_ICONS[vecKey]}</span>`;
+  }
+  if (/^(https?:\/\/|\/|data:image\/)/i.test(v)) return `<span class="cat-icon-preview"><img src="${esc(v)}" alt="" /></span>`;
+  return `<span class="cat-icon-preview">${esc(v)}</span>`;
+}
+
 function renderCategories() {
   const tbody = document.getElementById('admin-cats-tbody');
   if (!tbody) return;
   tbody.innerHTML = state.categories.length
     ? state.categories.map((c) => `
       <tr>
+        <td>${formatCatIconPreview(c.icon)}</td>
         <td><strong>${esc(c.slug)}</strong></td>
         <td>${esc(c.nameBn)}</td>
         <td>${esc(c.nameEn)}</td>
         <td class="tabular-nums">${Number(c.sortOrder || 0)}</td>
-        <td><button type="button" class="btn btn-danger btn-xs" data-del-cat="${esc(c.id)}">Delete</button></td>
+        <td>
+          <div class="inline-actions">
+            <button type="button" class="btn btn-outline btn-xs" data-edit-cat="${esc(c.id)}">Edit</button>
+            <button type="button" class="btn btn-danger btn-xs" data-del-cat="${esc(c.id)}">Delete</button>
+          </div>
+        </td>
       </tr>
     `).join('')
-    : '<tr><td colspan="5" class="muted-note">No categories configured.</td></tr>';
+    : '<tr><td colspan="6" class="muted-note">No categories configured.</td></tr>';
 }
 
 function renderCoupons() {
@@ -2747,6 +2794,7 @@ function bindEvents() {
       costPriceBdt: Math.max(0, Number(document.getElementById('pf-cost')?.value) || 0),
       resellerPriceBdt: Math.max(0, Number(document.getElementById('pf-reseller-price')?.value) || 0),
       stock: Math.max(0, parseInt(document.getElementById('pf-stock').value, 10) || 0),
+      salesCount: Math.max(0, parseInt(document.getElementById('pf-sales')?.value, 10) || 0),
       variants,
       variantDetails,
       fbtProductIds,
@@ -2783,7 +2831,6 @@ function bindEvents() {
         if (!hasPerm('canCreateProduct')) return showToast('Action not allowed.');
         await addDoc(collection(db, 'products'), {
           ...base,
-          salesCount: 0,
           createdBy: currentUser.uid,
           createdAt: serverTimestamp()
         });
@@ -2836,6 +2883,7 @@ function bindEvents() {
       if (document.getElementById('pf-preorder')) document.getElementById('pf-preorder').checked = !!p.isPreOrder;
       if (document.getElementById('pf-groupbuy')) document.getElementById('pf-groupbuy').checked = !!p.groupBuyEnabled;
       document.getElementById('pf-stock').value = p.stock || 0;
+      if (document.getElementById('pf-sales')) document.getElementById('pf-sales').value = Number(p.salesCount || 0);
       document.getElementById('pf-variants').value = (p.variants || []).join(', ');
       document.getElementById('pf-image').value = p.imageUrl || '';
       if (document.getElementById('pf-gallery')) document.getElementById('pf-gallery').value = Array.isArray(p.galleryUrls) ? p.galleryUrls.join(', ') : '';
@@ -2959,6 +3007,7 @@ function bindEvents() {
       document.getElementById('adm-em-eta').value = it.deliveryEta || '';
       if (document.getElementById('adm-em-cost')) document.getElementById('adm-em-cost').value = it.costPriceBdt || 0;
       if (document.getElementById('adm-em-renewal-days')) document.getElementById('adm-em-renewal-days').value = it.renewalDays || 0;
+      if (document.getElementById('adm-em-sales')) document.getElementById('adm-em-sales').value = Number(it.salesCount || 0);
       document.getElementById('adm-em-prompt').value = it.inputLabel || '';
       document.getElementById('adm-em-placeholder').value = it.inputPlaceholder || '';
       document.getElementById('adm-em-packages').value = (it.packages || []).map((p) => `${p.label}:${p.priceBdt}`).join(', ');
@@ -3183,6 +3232,33 @@ function bindEvents() {
     if (delNotif && hasPerm('canSendNotifications')) {
       await deleteDoc(doc(db, 'notifications', delNotif.dataset.delNotif));
       showToast('Notification deleted.');
+      return;
+    }
+
+    const pickIconBtn = e.target.closest('[data-pick-icon]');
+    if (pickIconBtn) {
+      const wrap = pickIconBtn.closest('[data-icon-target]');
+      const inp = wrap ? document.getElementById(wrap.dataset.iconTarget) : null;
+      if (inp) {
+        inp.value = pickIconBtn.dataset.pickIcon || '';
+        wrap.querySelectorAll('.icon-preset-btn').forEach((b) => b.classList.toggle('active', b === pickIconBtn));
+        inp.focus();
+      }
+      return;
+    }
+
+    const editCat = e.target.closest('[data-edit-cat]');
+    if (editCat && hasPerm('canManageCategories')) {
+      const c = state.categories.find((x) => x.id === editCat.dataset.editCat);
+      if (!c) return;
+      document.getElementById('adm-cat-slug').value = c.slug || c.id || '';
+      document.getElementById('adm-cat-en').value = c.nameEn || '';
+      document.getElementById('adm-cat-bn').value = c.nameBn || '';
+      document.getElementById('adm-cat-order').value = Number(c.sortOrder || 1);
+      const iconInp = document.getElementById('adm-cat-icon');
+      if (iconInp) iconInp.value = c.icon || '';
+      document.querySelectorAll('[data-icon-target="adm-cat-icon"] .icon-preset-btn').forEach((b) => b.classList.toggle('active', (c.icon || '') === b.dataset.pickIcon));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
@@ -3889,6 +3965,7 @@ function bindEvents() {
       packages,
       costPriceBdt: Math.max(0, Number(document.getElementById('adm-em-cost')?.value) || 0),
       renewalDays: Math.min(365, Math.max(0, parseInt(document.getElementById('adm-em-renewal-days')?.value, 10) || 0)),
+      salesCount: Math.max(0, parseInt(document.getElementById('adm-em-sales')?.value, 10) || 0),
       imageUrl: document.getElementById('adm-em-img').value.trim().slice(0, 500) || DEFAULT_LOGO,
       description: document.getElementById('adm-em-desc').value.trim().slice(0, 1000),
       deliveryEta: document.getElementById('adm-em-eta').value.trim().slice(0, 60),
@@ -3900,7 +3977,7 @@ function bindEvents() {
         await updateDoc(doc(db, 'emarketItems', id), payload);
         showToast('E-Market service updated.');
       } else {
-        await addDoc(collection(db, 'emarketItems'), { ...payload, salesCount: 0, createdBy: currentUser.uid, createdAt: serverTimestamp() });
+        await addDoc(collection(db, 'emarketItems'), { ...payload, createdBy: currentUser.uid, createdAt: serverTimestamp() });
         showToast('E-Market service published.');
       }
       document.getElementById('adm-em-id').value = '';
@@ -4096,16 +4173,18 @@ function bindEvents() {
     const nameEn = document.getElementById('adm-cat-en').value.trim().slice(0, 60);
     const nameBn = document.getElementById('adm-cat-bn').value.trim().slice(0, 80);
     const sortOrder = parseInt(document.getElementById('adm-cat-order').value, 10) || 1;
+    const icon = String(document.getElementById('adm-cat-icon')?.value || '').trim().slice(0, 500);
     if (!slug) return;
     try {
       const ref = doc(db, 'categories', slug);
       const existing = await getDoc(ref);
       if (existing.exists()) {
-        await updateDoc(ref, { slug, nameEn, nameBn, sortOrder, isActive: true, updatedAt: serverTimestamp() });
+        await updateDoc(ref, { slug, nameEn, nameBn, icon, sortOrder, isActive: true, updatedAt: serverTimestamp() });
       } else {
-        await setDoc(ref, { slug, nameEn, nameBn, sortOrder, isActive: true, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+        await setDoc(ref, { slug, nameEn, nameBn, icon, sortOrder, isActive: true, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
       }
       e.target.reset();
+      document.querySelectorAll('[data-icon-target="adm-cat-icon"] .icon-preset-btn').forEach((b) => b.classList.remove('active'));
       showToast('Category saved.');
     } catch (err) { showToast(err.message); }
   });
