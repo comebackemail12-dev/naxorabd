@@ -4197,13 +4197,57 @@ app.use(express.static(path.join(ROOT_DIR, 'public'), {
   }
 }));
 
-function sendAppIndexHtml(targetApp: string, res: Response) {
+function getPublicOrigin(req: Request): string {
+  const envUrl = String(process.env.APP_URL || '').trim().replace(/\/+$/, '');
+  if (envUrl) return envUrl;
+  const proto = String(req.headers['x-forwarded-proto'] || req.protocol || 'https').split(',')[0].trim();
+  const host = String(req.headers['x-forwarded-host'] || req.get('host') || 'nexorabd-swha.onrender.com').split(',')[0].trim();
+  return `${proto}://${host}`;
+}
+
+app.get('/robots.txt', (req: Request, res: Response) => {
+  const origin = getPublicOrigin(req);
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.send([
+    'User-agent: *',
+    'Allow: /',
+    'Disallow: /admin/',
+    'Disallow: /main-admin/',
+    'Disallow: /api/',
+    '',
+    `Sitemap: ${origin}/sitemap.xml`
+  ].join('\n'));
+});
+
+app.get('/sitemap.xml', (req: Request, res: Response) => {
+  const origin = getPublicOrigin(req).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const lastMod = new Date().toISOString().split('T')[0];
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.send([
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    '  <url>',
+    `    <loc>${origin}/</loc>`,
+    `    <lastmod>${lastMod}</lastmod>`,
+    '    <changefreq>daily</changefreq>',
+    '    <priority>1.0</priority>',
+    '  </url>',
+    '</urlset>'
+  ].join('\n'));
+});
+
+function sendAppIndexHtml(targetApp: string, res: Response, req?: Request) {
   const htmlPath = path.join(ROOT_DIR, 'apps', targetApp, 'index.html');
   if (!fs.existsSync(htmlPath)) {
     res.status(404).send('Not found');
     return;
   }
   let html = fs.readFileSync(htmlPath, 'utf-8');
+  if (targetApp === 'user' && req) {
+    const origin = getPublicOrigin(req).replace(/"/g, '&quot;');
+    const canonicalTags = `<link rel="canonical" href="${origin}/" />\n    <meta property="og:url" content="${origin}/" />\n`;
+    html = html.replace(/<\/head>/i, () => `${canonicalTags}  </head>`);
+  }
   const cfg = loadFirebaseConfig();
   if (cfg && cfg.projectId && cfg.projectId !== 'remixed-project-id') {
     const publicFbCfg = {
@@ -4227,9 +4271,9 @@ function sendAppIndexHtml(targetApp: string, res: Response) {
   res.send(html);
 }
 
-app.get(['/', '/index.html', '/user', '/user/', '/user/index.html'], (_req, res) => sendAppIndexHtml('user', res));
-app.get(['/admin', '/admin/', '/admin/index.html'], (_req, res) => sendAppIndexHtml('admin', res));
-app.get(['/main-admin', '/main-admin/', '/main-admin/index.html'], (_req, res) => sendAppIndexHtml('main-admin', res));
+app.get(['/', '/index.html', '/user', '/user/', '/user/index.html'], (req, res) => sendAppIndexHtml('user', res, req));
+app.get(['/admin', '/admin/', '/admin/index.html'], (req, res) => sendAppIndexHtml('admin', res, req));
+app.get(['/main-admin', '/main-admin/', '/main-admin/index.html'], (req, res) => sendAppIndexHtml('main-admin', res, req));
 
 // Serve the 3 isolated 3-file applications
 app.use('/admin', express.static(path.join(ROOT_DIR, 'apps/admin'), noCacheStaticOptions));
