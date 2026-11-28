@@ -4914,3 +4914,48 @@ body:has(.modal-backdrop:not(.hidden), .drawer-backdrop:not(.hidden)) .back-to-t
   }
 }
 
+/* Custom Category Icons (Vector SVG / Image / Fallback Glyph) */
+.cat-icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  display: block;
+}
+.circle-cat-ring .cat-icon-img {
+  width: 22px;
+  height: 22px;
+}
+.circle-cat-ring svg {
+  width: 19px;
+  height: 19px;
+}
+.cat-icon-emoji {
+  font-size: 15px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: grayscale(1) brightness(1.35) contrast(1.2);
+}
+.cat-tab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+.cat-tab-icon svg {
+  width: 14px;
+  height: 14px;
+}
+.cat-tab-icon .cat-icon-img {
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+}
+.cat-tab-icon .cat-icon-emoji {
+  font-size: 13px;
+}
+
